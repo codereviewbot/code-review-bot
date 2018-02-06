@@ -5,5 +5,9 @@
 
 (def webhooks
     (POST "/git-hook" req
-        (log/warn (:body req))
+        (log/warn "headers: " (:headers req))
+        (log/warn "commiter: " (get-in req [:body :head_commit :committer]))
+        (log/warn "message: " (get-in req [:body :head_commit :message]))
+        (log/warn "repository: " (get-in req [:body :repository :html_url]))
+        (log/warn "ref: " (get-in req [:body :ref]))
         {:status 204}))
