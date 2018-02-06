@@ -26,6 +26,8 @@
                    [ring/ring-core "1.3.2"]
                    [ring/ring-defaults "0.2.1"]
                    [ring/ring-json "0.3.1"]]
+    :jar-name "code-review-bot.jar"
+    :uberjar-name "code-review-bot-standalone.jar"
     :source-paths ["src/clj"]
     :test-paths ["test/clj"]
     :profiles {:dev {:main com.ben-allred.code-review-bot.core/-dev
