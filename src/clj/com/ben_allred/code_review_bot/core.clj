@@ -6,7 +6,8 @@
         [ring.middleware.reload :refer [wrap-reload]]
         [ring.middleware.json :refer [wrap-json-body wrap-json-response]]
         [clojure.tools.nrepl.server :as nrepl]
-        [com.ben-allred.code-review-bot.routes.git-hook :as git-hooks]))
+        [com.ben-allred.code-review-bot.routes.git-hook :as git-hooks]
+        [com.ben-allred.code-review-bot.utils.env :as env]))
 
 (defroutes ^:private base
     (context "/api" [] git-hooks/webhooks)
@@ -19,8 +20,8 @@
         (site)))
 
 (defn ^:private run [app]
-    (run-server #'app {:port 3000})
-    (println "Server is listening on port 3000"))
+    (run-server #'app {:port env/server-port})
+    (println "Server is listening on port" env/server-port))
 
 (defn -main [& args]
     (run app))
@@ -28,5 +29,5 @@
 (defn -dev [& args]
     (println "Server is running with #'wrap-reload")
     (run (wrap-reload #'app))
-    (nrepl/start-server :port 7000)
-    (println "REPL is listening on port 7000"))
+    (nrepl/start-server :port env/nrepl-port)
+    (println "REPL is listening on port" env/nrepl-port))
