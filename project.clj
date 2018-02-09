@@ -15,6 +15,7 @@
                                                 [javax.jms/jms :classifier "*"]
                                                 com.sun.jdmk/jmxtools
                                                 com.sun.jmx/jmxri]]
+                   [metosin/jsonista "0.1.1"]
                    [org.clojure/clojure "1.9.0"]
                    [org.clojure/clojurescript "1.9.946"]
                    [org.clojure/core.async "0.3.465"]
@@ -22,9 +23,9 @@
                    [org.clojure/test.check "0.9.0"]
                    [org.clojure/tools.logging "0.4.0"]
                    [org.clojure/tools.nrepl "0.2.12"]
-                   [ring/ring-devel "1.6.3"]
                    [ring/ring-core "1.3.2"]
                    [ring/ring-defaults "0.2.1"]
+                   [ring/ring-devel "1.6.3"]
                    [ring/ring-json "0.3.1"]]
     :jar-name "code-review-bot.jar"
     :uberjar-name "code-review-bot-standalone.jar"
