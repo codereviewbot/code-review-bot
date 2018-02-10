@@ -18,7 +18,7 @@
 
 (defn ^:private req->payload [{:keys [body]}]
     {:branch (ref->branch (:ref body))
-     :commit (:commit body)
+     :commit (:head_commit body)
      :repository (:repository body)})
 
 (defn ^:private wrap-message [commit message]
