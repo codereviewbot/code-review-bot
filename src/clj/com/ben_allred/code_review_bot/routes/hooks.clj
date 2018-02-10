@@ -22,7 +22,7 @@
      :repository (:repository body)})
 
 (defn ^:private wrap-message [commit message]
-    (str "I have reviewed your commit:\n" (:url commit) "\n> " message))
+    (str "I have reviewed the code in your commit:\n" (:url commit) "\n> " message))
 
 (defn ^:private handle-integration [config {:keys [commit] :as payload}]
     (some->> payload
@@ -40,5 +40,4 @@
             (if config
                 (do (handle-integration config payload)
                     {:status 204})
-                (do (log/warn "Integration not found!")
-                    {:status 404 :body {:message "Integration not found"}})))))
+                {:status 404 :body {:message "Integration not found"}}))))

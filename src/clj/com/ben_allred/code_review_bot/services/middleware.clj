@@ -4,9 +4,11 @@
 
 (defn log-response [handler]
     (fn [request]
-        (let [response (handler request)]
-            (log/info (format "[%d] %s: %s"
-                          (:status response)
-                          (string/upper-case (name (:request-method request)))
-                          (:uri request)))
+        (let [response (handler request)
+              uri      (:uri request)]
+            (when-not (or (= "/" uri) (re-find #"(^/js|^/css)" uri))
+                (log/info (format "[%d] %s: %s"
+                              (:status response)
+                              (string/upper-case (name (:request-method request)))
+                              uri)))
             response)))

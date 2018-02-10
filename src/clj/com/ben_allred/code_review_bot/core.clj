@@ -1,18 +1,21 @@
 (ns com.ben-allred.code-review-bot.core
     (:gen-class)
     (:use compojure.core org.httpkit.server)
-    (:require
-        [compojure.handler :refer [site]]
-        [ring.middleware.reload :refer [wrap-reload]]
-        [ring.middleware.json :refer [wrap-json-body wrap-json-response]]
-        [clojure.tools.nrepl.server :as nrepl]
-        [com.ben-allred.code-review-bot.routes.hooks :as git-hooks]
-        [com.ben-allred.code-review-bot.services.middleware :as middleware]
-        [com.ben-allred.code-review-bot.utils.env :as env]))
+    (:require [compojure.handler :refer [site]]
+              [compojure.route :as route]
+              [ring.middleware.reload :refer [wrap-reload]]
+              [ring.middleware.json :refer [wrap-json-body wrap-json-response]]
+              [clojure.tools.nrepl.server :as nrepl]
+              [com.ben-allred.code-review-bot.routes.hooks :as git-hooks]
+              [com.ben-allred.code-review-bot.services.middleware :as middleware]
+              [com.ben-allred.code-review-bot.utils.env :as env]
+              [ring.util.response :as response]))
 
 (defroutes ^:private base
     (context "/api" [] git-hooks/webhooks)
-    (GET "/health" [] {:status 200 :body {:a :ok}}))
+    (GET "/health" [] {:status 200 :body {:a :ok}})
+    (route/resources "/")
+    (GET "/*" [] (response/resource-response "index.html" {:root "public"})))
 
 (def ^:private app
     (-> #'base
