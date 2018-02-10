@@ -6,7 +6,8 @@
         [ring.middleware.reload :refer [wrap-reload]]
         [ring.middleware.json :refer [wrap-json-body wrap-json-response]]
         [clojure.tools.nrepl.server :as nrepl]
-        [com.ben-allred.code-review-bot.routes.git-hook :as git-hooks]
+        [com.ben-allred.code-review-bot.routes.hooks :as git-hooks]
+        [com.ben-allred.code-review-bot.services.middleware :as middleware]
         [com.ben-allred.code-review-bot.utils.env :as env]))
 
 (defroutes ^:private base
@@ -17,6 +18,7 @@
     (-> #'base
         (wrap-json-response)
         (wrap-json-body {:keywords? true :bigdecimals? true})
+        (middleware/log-response)
         (site)))
 
 (defn ^:private run [app]
