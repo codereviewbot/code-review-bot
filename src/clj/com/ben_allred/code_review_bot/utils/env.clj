@@ -3,6 +3,8 @@
 
 (def env env/env)
 
+(def dev? (not= "production" (:ring-env env)))
+
 (def server-port
     (if-let [port (:port env)]
         (Integer/parseInt (str port))

@@ -1,5 +1,7 @@
 (ns com.ben-allred.code-review-bot.utils.logging
-    (:require [clojure.tools.logging :as logger]))
+    (:require [clojure.tools.logging :as logger]
+              [com.ben-allred.code-review-bot.utils.env :as env]
+              [com.ben-allred.code-review-bot.utils.colors :as colors]))
 
 (defmacro debug [& args]
     `(logger/debug ~@args))
@@ -15,5 +17,5 @@
 
 (defmacro spy [expression]
     `(let [result# ~expression]
-         (warn (quote ~expression) " => " result#)
+         (warn (quote ~expression) " => " (if env/dev? (colors/colorize result#) result#))
          result#))
