@@ -8,6 +8,7 @@
 
     :dependencies [[clj-http "3.7.0"]
                    [com.ben-allred/collaj "0.4.0"]
+                   [com.novemberain/monger "3.1.0"]
                    [compojure "1.6.0"]
                    [environ "1.1.0"]
                    [http-kit "2.1.18"]

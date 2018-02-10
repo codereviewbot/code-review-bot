@@ -15,3 +15,6 @@
 
 (defn map-vals [val-fn m]
     (map-kv identity val-fn m))
+
+(defn update-all [m f & f-args]
+    (map-vals #(apply f % f-args) m))
