@@ -32,6 +32,8 @@
                    [ring/ring-devel "1.6.3"]
                    [ring/ring-json "0.3.1"]]
 
+    ;:hooks [leiningen.sass]
+
     :plugins [[lein-cljsbuild "1.1.7" :exclusions [[org.clojure/clojure]]]
               [lein-cooper "1.2.2"]
               [lein-figwheel "0.5.14"]
