@@ -32,8 +32,6 @@
                    [ring/ring-devel "1.6.3"]
                    [ring/ring-json "0.3.1"]]
 
-    ;:hooks [leiningen.sass]
-
     :plugins [[lein-cljsbuild "1.1.7" :exclusions [[org.clojure/clojure]]]
               [lein-cooper "1.2.2"]
               [lein-figwheel "0.5.14"]
@@ -41,6 +39,7 @@
 
     :jar-name "code-review-bot.jar"
     :uberjar-name "code-review-bot-standalone.jar"
+    :prep-tasks ["compile" ["cljsbuild" "once" "min"] ["sass" "once"]]
     :source-paths ["src/clj" "src/cljs"]
     :test-paths ["test/clj" "test/cljs"]
 
@@ -55,6 +54,7 @@
                                          :preloads             [devtools.preload]}}
                          {:id           "min"
                           :source-paths ["src/cljs"]
+                          :jar          true
                           :compiler     {:output-to     "resources/public/js/compiled/code_review_bot.js"
                                          :main          com.ben-allred.code-review-bot.ui.core
                                          :optimizations :advanced
@@ -74,7 +74,7 @@
                                      [com.cemerick/piggieback "0.2.2"]]
                      :main          com.ben-allred.code-review-bot.core/-dev
                      :source-paths  ["src/clj" "src/cljs" "dev"]
-                     :plugins [[cider/cider-nrepl "0.12.0"]]
+                     :plugins       [[cider/cider-nrepl "0.12.0"]]
                      :clean-targets ^{:protect false} ["resources/public/js/compiled"
                                                        :target-path]
                      :repl-options  {:nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}}})
