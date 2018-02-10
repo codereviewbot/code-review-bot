@@ -6,7 +6,7 @@
         [clojure.string :as string]
         [clojure.set :as set]
         [com.ben-allred.code-review-bot.services.slack :as slack]
-        [com.ben-allred.code-review-bot.db.configs :as configs]
+        [com.ben-allred.code-review-bot.db.models.configs :as configs]
         [com.ben-allred.code-review-bot.utils.strings :as strings]))
 
 (defn ^:private ref->branch [ref]
@@ -34,7 +34,7 @@
 (def webhooks
     (POST "/hooks/git" req
         (let [repo-url (get-in req [:body :repository :html_url])
-              config (configs/find-one {:repo-url repo-url})
+              config (configs/find-by-repo repo-url)
               payload (req->payload req)]
             (log/info "received payload:" payload)
             (if config

@@ -1,5 +1,5 @@
 (ns com.ben-allred.code-review-bot.services.mongo
-    (:refer-clojure :exclude [find update])
+    (:refer-clojure :exclude [update])
     (:require [monger.core :as mg]
               [monger.collection :as mc]
               [com.ben-allred.code-review-bot.utils.env :as env]
@@ -7,7 +7,7 @@
               [com.ben-allred.code-review-bot.utils.maps :as maps]))
 
 (defn ^:private conn-str [uri]
-    (str uri "?maxPoolSize=128&waitQueueMultiple=5;waitQueueTimeoutMS=150;socketTimeoutMS=5500&autoConnectRetry=true;safe=false&w=1;wtimeout=2500;fsync=true"))
+    (str uri "?maxPoolSize=128&waitQueueMultiple=5;waitQueueTimeoutMS=150;socketTimeoutMS=5500;safe=false&w=1;wtimeout=2500;fsync=true"))
 
 (defonce ^:private db
     (delay
@@ -17,7 +17,7 @@
 
 (def object-id monger.conversion/to-object-id)
 
-(def find
+(def find-many
     (partial mc/find-maps @db))
 
 (def find-one
