@@ -3,7 +3,7 @@
 
 (defn ^:private rule->fn [payload]
     (fn [[path condition]]
-        (re-find (re-pattern condition) (get-in payload path))))
+        (re-find (re-pattern (str condition)) (get-in payload path ""))))
 
 (defn message-key [rules payload]
     (first (for [[result conditions] rules
