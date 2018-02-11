@@ -6,13 +6,15 @@
     :aot [com.ben-allred.code-review-bot.core]
     :min-lein-version "2.6.1"
 
-    :dependencies [[clj-http "3.7.0"]
+    :dependencies [[bidi "2.1.3"]
+                   [clj-http "3.7.0"]
                    [cljs-http "0.1.43"]
                    [com.ben-allred/collaj "0.4.0"]
                    [com.novemberain/monger "3.1.0" :exclusions [com.google.guava/guava]]
                    [compojure "1.6.0"]
                    [environ "1.1.0"]
                    [http-kit "2.1.18"]
+                   [kibu/pushy "0.3.8"]
                    [log4j "1.2.16" :exclusions [[javax.mail/mail :extension "jar"]
                                                 [javax.jms/jms :classifier "*"]
                                                 com.sun.jdmk/jmxtools
@@ -40,13 +42,13 @@
     :jar-name "code-review-bot.jar"
     :uberjar-name "code-review-bot-standalone.jar"
     :prep-tasks ["compile" ["cljsbuild" "once" "min"] ["sass" "once"]]
-    :source-paths ["src/clj" "src/cljs"]
+    :source-paths ["src/clj" "src/cljs" "src/cljc"]
     :test-paths ["test/clj" "test/cljs"]
 
     :cljsbuild {:builds [{:id           "dev"
                           :source-paths ["src/cljs"]
-                          :figwheel     {:on-jsload "com.ben-allred.code-review-bot.ui.core/on-js-reload"}
-                          :compiler     {:main                 com.ben-allred.code-review-bot.ui.core
+                          :figwheel     {:on-jsload "com.ben-allred.code-review-bot.ui.app/on-js-reload"}
+                          :compiler     {:main                 com.ben-allred.code-review-bot.ui.app
                                          :asset-path           "js/compiled/out"
                                          :output-to            "resources/public/js/compiled/code_review_bot.js"
                                          :output-dir           "resources/public/js/compiled/out"
@@ -56,7 +58,7 @@
                           :source-paths ["src/cljs"]
                           :jar          true
                           :compiler     {:output-to     "resources/public/js/compiled/code_review_bot.js"
-                                         :main          com.ben-allred.code-review-bot.ui.core
+                                         :main          com.ben-allred.code-review-bot.ui.app
                                          :optimizations :advanced
                                          :pretty-print  false}}]}
 
@@ -73,7 +75,7 @@
                                      [figwheel-sidecar "0.5.14"]
                                      [com.cemerick/piggieback "0.2.2"]]
                      :main          com.ben-allred.code-review-bot.core/-dev
-                     :source-paths  ["src/clj" "src/cljs" "dev"]
+                     :source-paths  ["src/clj" "src/cljs" "src/cljc"]
                      :plugins       [[cider/cider-nrepl "0.12.0"]]
                      :clean-targets ^{:protect false} ["resources/public/js/compiled"
                                                        :target-path]
