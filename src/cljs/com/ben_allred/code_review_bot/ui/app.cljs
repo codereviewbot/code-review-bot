@@ -1,9 +1,9 @@
 (ns com.ben-allred.code-review-bot.ui.app
     (:require [com.ben-allred.code-review-bot.ui.services.store.core :as store]
-              [com.ben-allred.code-review-bot.ui.utils.logging :as log]
               [com.ben-allred.code-review-bot.ui.views.home :as home]
               [com.ben-allred.code-review-bot.ui.views.not-found :as not-found]
               [com.ben-allred.code-review-bot.ui.views.auth :as auth]
+              [com.ben-allred.code-review-bot.utils.logging :as log :include-macros true]
               [reagent.core :as r]))
 
 (enable-console-print!)

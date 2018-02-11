@@ -11,14 +11,11 @@
                    [cljs-http "0.1.43"]
                    [com.ben-allred/collaj "0.4.0"]
                    [com.novemberain/monger "3.1.0" :exclusions [com.google.guava/guava]]
+                   [com.taoensso/timbre "4.10.0"]
                    [compojure "1.6.0"]
                    [environ "1.1.0"]
                    [http-kit "2.1.18"]
                    [kibu/pushy "0.3.8"]
-                   [log4j "1.2.16" :exclusions [[javax.mail/mail :extension "jar"]
-                                                [javax.jms/jms :classifier "*"]
-                                                com.sun.jdmk/jmxtools
-                                                com.sun.jmx/jmxri]]
                    [metosin/jsonista "0.1.1"]
                    [org.clojure/clojure "1.9.0"]
                    [org.clojure/clojurescript "1.9.946"]
@@ -26,7 +23,6 @@
                    [org.clojure/core.async "0.3.465"]
                    [org.clojure/data.json "0.2.6"]
                    [org.clojure/test.check "0.9.0"]
-                   [org.clojure/tools.logging "0.4.0"]
                    [org.clojure/tools.nrepl "0.2.12"]
                    [reagent "0.7.0"]
                    [ring/ring-core "1.3.2"]
@@ -46,7 +42,7 @@
     :test-paths ["test/clj" "test/cljs"]
 
     :cljsbuild {:builds [{:id           "dev"
-                          :source-paths ["src/cljs"]
+                          :source-paths ["src/cljs" "src/cljc"]
                           :figwheel     {:on-jsload "com.ben-allred.code-review-bot.ui.app/on-js-reload"}
                           :compiler     {:main                 com.ben-allred.code-review-bot.ui.app
                                          :asset-path           "js/compiled/out"
@@ -55,7 +51,7 @@
                                          :source-map-timestamp true
                                          :preloads             [devtools.preload]}}
                          {:id           "min"
-                          :source-paths ["src/cljs"]
+                          :source-paths ["src/cljs" "src/cljc"]
                           :jar          true
                           :compiler     {:output-to     "resources/public/js/compiled/code_review_bot.js"
                                          :main          com.ben-allred.code-review-bot.ui.app
