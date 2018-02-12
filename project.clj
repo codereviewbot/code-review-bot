@@ -37,7 +37,6 @@
 
     :jar-name "code-review-bot.jar"
     :uberjar-name "code-review-bot-standalone.jar"
-    :prep-tasks ["compile" ["cljsbuild" "once" "min"] ["sass" "once"]]
     :source-paths ["src/clj" "src/cljs" "src/cljc"]
     :test-paths ["test/clj" "test/cljs"]
 
@@ -73,6 +72,12 @@
                      :main          com.ben-allred.code-review-bot.core/-dev
                      :source-paths  ["src/clj" "src/cljs" "src/cljc"]
                      :plugins       [[cider/cider-nrepl "0.12.0"]]
-                     :clean-targets ^{:protect false} ["resources/public/js/compiled"
+                     :clean-targets ^{:protect false} ["resources/public/js"
+                                                       "resources/public/css"
                                                        :target-path]
-                     :repl-options  {:nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}}})
+                     :repl-options  {:nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}}
+               :deploy {:clean-targets ^{:protect false} ["resources/public/js"
+                                                          "resources/public/css"
+                                                          :target-path]
+                        :sass {:style :compressed}
+                        :prep-tasks ["compile" ["cljsbuild" "once" "min"] ["sass" "once"]]}})
