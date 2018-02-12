@@ -48,10 +48,18 @@
         (pushy/start! history)
         history))
 
+(defn reload! []
+    (.reload (.-location js/window)))
+
 (defn navigate!
     ([page] (navigate! page nil))
     ([page params]
         (pushy/set-token! history (path-for page params))))
+
+(defn nav-and-replace!
+    ([page] (nav-and-replace! page nil))
+    ([page params]
+        (pushy/replace-token! history (path-for page params))))
 
 (defn link [{:keys [page params]} & children]
     (into [:a {:href "#" :on-click (fn [_] (navigate! page params))}] children))

@@ -1,4 +1,4 @@
-(ns com.ben-allred.code-review-bot.routes.hooks
+(ns com.ben-allred.code-review-bot.api.hooks
     (:use compojure.core)
     (:require
         [com.ben-allred.code-review-bot.utils.logging :as log]

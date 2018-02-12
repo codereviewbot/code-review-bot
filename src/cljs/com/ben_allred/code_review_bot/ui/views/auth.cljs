@@ -6,3 +6,10 @@
      [:h2 "login"]
      [:div
       [nav/link {:page :home} "go home"]]])
+
+(defn logout-button []
+    [:button
+     {:on-click (fn []
+                    (.pushState (.-history js/window) nil nil "/auth/logout")
+                    (nav/reload!))}
+     "logout"])

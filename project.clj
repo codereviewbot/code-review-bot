@@ -8,6 +8,8 @@
 
     :dependencies [[bidi "2.1.3"]
                    [clj-http "3.7.0"]
+                   [clj-jwt "0.1.1"]
+                   [clj-time "0.6.0"]
                    [cljs-http "0.1.43"]
                    [com.ben-allred/collaj "0.4.0"]
                    [com.novemberain/monger "3.1.0" :exclusions [com.google.guava/guava]]
@@ -19,7 +21,6 @@
                    [metosin/jsonista "0.1.1"]
                    [org.clojure/clojure "1.9.0"]
                    [org.clojure/clojurescript "1.9.946"]
-                   [org.clojure/clojurescript "1.9.946"]
                    [org.clojure/core.async "0.3.465"]
                    [org.clojure/data.json "0.2.6"]
                    [org.clojure/test.check "0.9.0"]
@@ -28,7 +29,8 @@
                    [ring/ring-core "1.3.2"]
                    [ring/ring-defaults "0.2.1"]
                    [ring/ring-devel "1.6.3"]
-                   [ring/ring-json "0.3.1"]]
+                   [ring/ring-json "0.3.1"]
+                   [sudharsh/clj-oauth2 "0.5.3"]]
 
     :plugins [[lein-cljsbuild "1.1.7" :exclusions [[org.clojure/clojure]]]
               [lein-cooper "1.2.2"]
