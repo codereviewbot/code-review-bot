@@ -22,7 +22,9 @@
      :repository (:repository body)})
 
 (defn ^:private wrap-message [commit message]
-    (str "I have reviewed the code in your commit:\n" (:url commit) "\n> " message))
+    (str "I have reviewed the code in your commit:\n"
+        "\n<" (:url commit) "|" (:message (log/spy commit)) ">"
+        "\n> " message))
 
 (defn ^:private handle-integration [config {:keys [commit] :as payload}]
     (some->> payload
