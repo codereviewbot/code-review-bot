@@ -25,6 +25,7 @@
         (wrap-json-response)
         (wrap-json-body {:keywords? true :bigdecimals? true})
         (middleware/log-response)
+        (middleware/decode-jwt)
         (site)))
 
 (defn ^:private run [app]

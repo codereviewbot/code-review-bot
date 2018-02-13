@@ -15,7 +15,7 @@
     (GET "/login" []
         (-> (str (env/env :base-url) "/")
             (resp/redirect)
-            (token->cookie {:email "some@email.here"})))
+            (token->cookie {:email "ben@aclaimant.com"})))
     (GET "/logout" req
         (-> (str (env/env :base-url) "/")
             (resp/redirect)
