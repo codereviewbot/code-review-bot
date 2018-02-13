@@ -46,7 +46,7 @@
                           :source-paths ["src/cljs" "src/cljc"]
                           :figwheel     {:on-jsload "com.ben-allred.code-review-bot.ui.app/on-js-reload"}
                           :compiler     {:main                 com.ben-allred.code-review-bot.ui.app
-                                         :asset-path           "js/compiled/out"
+                                         :asset-path           "/js/compiled/out"
                                          :output-to            "resources/public/js/compiled/code_review_bot.js"
                                          :output-dir           "resources/public/js/compiled/out"
                                          :source-map-timestamp true
