@@ -10,4 +10,10 @@
                            (db/find-repos-for-user-by-email))]
             {:status 200
              :body   {:data repos}}
+            {:status 404}))
+    (GET "/:repo-id" {:keys [params] :as req}
+        (if-let [repo (-> (get-in req [:user :email])
+                          (db/find-repo-for-user-by-email (:repo-id params)))]
+            {:status 200
+             :body {:data repo}}
             {:status 404})))

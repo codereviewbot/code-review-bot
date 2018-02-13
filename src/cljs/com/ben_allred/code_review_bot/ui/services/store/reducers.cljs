@@ -9,6 +9,24 @@
          :router/navigate page
          state)))
 
+(defn repo
+    ([] [])
+    ([state [type repo]]
+     (case type
+         :repo/request :requesting
+         :repo/fail :failed
+         :repo/succeed (:data repo)
+         state)))
+
+(defn repos
+    ([] [])
+    ([state [type repos]]
+     (case type
+         :repos/request :requesting
+         :repos/fail :failed
+         :repos/succeed (:data repos)
+         state)))
+
 (defn user
     ([] nil)
     ([state [type user]]
@@ -18,14 +36,5 @@
             :user/succeed (:data user)
             state)))
 
-(defn repos
-    ([] [])
-    ([state [type repos]]
-        (case type
-            :repos/request :requesting
-            :repos/fail :failed
-            :repos/succeed (:data repos)
-            state)))
-
 (def root
-    (collaj.reducers/combine (maps/->map page user repos)))
+    (collaj.reducers/combine (maps/->map page repo repos user)))

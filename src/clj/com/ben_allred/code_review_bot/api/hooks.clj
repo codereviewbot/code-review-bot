@@ -34,13 +34,12 @@
         (slack/send-hook (:slack-path config))))
 
 (def webhooks
-    (context "/hooks"
-             (POST "/git" req
-                 (let [repo-url (get-in req [:body :repository :html_url])
-                       config   (configs/find-by-repo repo-url)
-                       payload  (req->payload req)]
-                     (log/info "received payload:" payload)
-                     (if config
-                         (do (handle-integration config payload)
-                             {:status 204})
-                         {:status 404 :body {:message "Integration not found"}})))))
+    (POST "/git" req
+        (let [repo-url (get-in req [:body :repository :html_url])
+              config   (configs/find-by-repo repo-url)
+              payload  (req->payload req)]
+            (log/info "received payload:" payload)
+            (if config
+                (do (handle-integration config payload)
+                    {:status 204})
+                {:status 404 :body {:message "Integration not found"}}))))

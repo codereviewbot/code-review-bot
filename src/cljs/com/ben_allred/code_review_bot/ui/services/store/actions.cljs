@@ -17,3 +17,10 @@
         (http/get "/api/repos"
             (cb dispatch :repos/succeed)
             (cb dispatch :repos/fail))))
+
+(defn request-repo [repo-id]
+    (fn [[dispatch]]
+        (dispatch [:repo/request])
+        (http/get (str "/api/repos/" repo-id)
+            (cb dispatch :repo/succeed)
+            (cb dispatch :repo/fail))))

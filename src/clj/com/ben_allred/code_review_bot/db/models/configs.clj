@@ -1,6 +1,7 @@
 (ns com.ben-allred.code-review-bot.db.models.configs
     (:require [com.ben-allred.code-review-bot.utils.maps :as maps]
-              [com.ben-allred.code-review-bot.services.mongo :as mongo]))
+              [com.ben-allred.code-review-bot.services.mongo :as mongo]
+              [clojure.set :as set]))
 
 (defn ^:private keywordify [rules]
     (for [[key conditions] rules]
@@ -10,7 +11,8 @@
 (defn ^:private transform [document]
     (-> document
         (maps/update-maybe :messages maps/update-all set)
-        (maps/update-maybe :rules keywordify)))
+        (maps/update-maybe :rules keywordify)
+        (set/rename-keys {:_id :id})))
 
 (def ^:private find-one
     (comp transform (partial mongo/find-one :configs)))

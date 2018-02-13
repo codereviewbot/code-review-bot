@@ -1,6 +1,15 @@
-(ns com.ben-allred.code-review-bot.utils.keywords)
+(ns com.ben-allred.code-review-bot.utils.keywords
+    (:require [clojure.string :as string]))
 
 (defn safe-name [v]
     (if (keyword? v)
         (name v)
         v))
+
+(defn join
+    ([kwds] (join "" kwds))
+    ([separator kwds]
+     (->> kwds
+         (map (comp str safe-name))
+         (string/join separator)
+         (keyword))))

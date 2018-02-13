@@ -9,7 +9,7 @@
               uri      (:uri request)]
             (when-not (or (= "/" uri) (re-find #"(^/js|^/css)" uri))
                 (log/info (format "[%d] %s: %s"
-                              (:status response)
+                              (or (:status response) 404)
                               (string/upper-case (name (:request-method request)))
                               uri)))
             response)))
