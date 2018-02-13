@@ -31,8 +31,7 @@
 (defn app []
     (let [state     (store/get-state)
           component (components (get-in state [:page :handler]) error/not-found)]
-        [:div
-         {:style {:margin "8px"}}
+        [:div.app
          [:h1 "Code Review Bot"]
          [with-logged-in-status state component]]))
 

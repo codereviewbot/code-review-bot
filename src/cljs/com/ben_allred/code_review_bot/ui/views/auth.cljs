@@ -8,7 +8,7 @@
       [nav/link {:page :home} "go home"]]])
 
 (defn logout-button []
-    [:button
+    [:button.pure-button.pure-button-primary
      {:on-click (fn []
                     (.pushState (.-history js/window) nil nil "/auth/logout")
                     (nav/reload!))}

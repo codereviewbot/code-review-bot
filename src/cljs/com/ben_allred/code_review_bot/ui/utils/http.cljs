@@ -10,6 +10,6 @@
 
 (defn get [url success-cb error-cb]
     (async/go
-        (let [response (async/<! (log/spy (client/get url)))
+        (let [response (async/<! (client/get url))
               cb (if (success? response) success-cb error-cb)]
             (cb (:body response)))))
