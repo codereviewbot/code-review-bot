@@ -8,13 +8,16 @@
               [clojure.tools.nrepl.server :as nrepl]
               [com.ben-allred.code-review-bot.auth.core :as auth]
               [com.ben-allred.code-review-bot.api.hooks :as hooks]
+              [com.ben-allred.code-review-bot.api.repos :as repos]
               [com.ben-allred.code-review-bot.services.middleware :as middleware]
               [com.ben-allred.code-review-bot.utils.env :as env]
               [ring.util.response :as response]
               [com.ben-allred.code-review-bot.utils.logging :as log]))
 
 (defroutes ^:private base
-    (context "/api" [] hooks/webhooks)
+    (context "/api" []
+        (context "/hooks" [] hooks/webhooks)
+        (context "/repos" [] repos/repos))
     (context "/auth" [] auth/auth)
     (GET "/health" [] {:status 200 :body {:a :ok}})
     (route/resources "/")

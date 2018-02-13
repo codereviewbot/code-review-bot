@@ -5,4 +5,4 @@
     [:div
      [:h2 "home"]
      [:div
-      [nav/link {:page :login} "login"]]])
+      [nav/link {:page :repos} "/repos"]]])

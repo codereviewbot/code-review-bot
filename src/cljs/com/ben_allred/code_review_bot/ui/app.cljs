@@ -8,6 +8,7 @@
               [com.ben-allred.code-review-bot.ui.views.components.core :as components]
               [com.ben-allred.code-review-bot.ui.services.store.actions :as actions]
               [reagent.core :as r]
+              [com.ben-allred.code-review-bot.ui.views.repos :as repos]
               [com.ben-allred.code-review-bot.ui.services.navigation :as nav]))
 
 (enable-console-print!)
@@ -16,7 +17,8 @@
 
 (def components
     {:home  home/root
-     :login auth/login})
+     :login auth/login
+     :repos repos/root})
 
 (defn with-logged-in-status [state component]
     (store/dispatch actions/request-user-details)

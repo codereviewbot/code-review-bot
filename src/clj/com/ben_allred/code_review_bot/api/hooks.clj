@@ -17,8 +17,8 @@
         (strings/trim-to-nil)))
 
 (defn ^:private req->payload [{:keys [body]}]
-    {:branch (ref->branch (:ref body))
-     :commit (:head_commit body)
+    {:branch     (ref->branch (:ref body))
+     :commit     (:head_commit body)
      :repository (:repository body)})
 
 (defn ^:private wrap-message [commit message]
@@ -32,12 +32,13 @@
         (slack/send-hook (:slack-path config))))
 
 (def webhooks
-    (POST "/hooks/git" req
-        (let [repo-url (get-in req [:body :repository :html_url])
-              config (configs/find-by-repo repo-url)
-              payload (req->payload req)]
-            (log/info "received payload:" payload)
-            (if config
-                (do (handle-integration config payload)
-                    {:status 204})
-                {:status 404 :body {:message "Integration not found"}}))))
+    (context "/hooks"
+             (POST "/git" req
+                 (let [repo-url (get-in req [:body :repository :html_url])
+                       config   (configs/find-by-repo repo-url)
+                       payload  (req->payload req)]
+                     (log/info "received payload:" payload)
+                     (if config
+                         (do (handle-integration config payload)
+                             {:status 204})
+                         {:status 404 :body {:message "Integration not found"}})))))

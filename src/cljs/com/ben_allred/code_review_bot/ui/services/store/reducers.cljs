@@ -15,8 +15,17 @@
         (case type
             :user/request :requesting
             :user/fail :failed
-            :user/succeed user
+            :user/succeed (:data user)
+            state)))
+
+(defn repos
+    ([] [])
+    ([state [type repos]]
+        (case type
+            :repos/request :requesting
+            :repos/fail :failed
+            :repos/succeed (:data repos)
             state)))
 
 (def root
-    (collaj.reducers/combine (maps/->map page user)))
+    (collaj.reducers/combine (maps/->map page user repos)))

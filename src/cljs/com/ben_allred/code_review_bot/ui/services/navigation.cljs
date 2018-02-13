@@ -6,7 +6,7 @@
               [com.ben-allred.code-review-bot.ui.services.store.core :as store]))
 
 (defn ^:private namify [[k v]]
-    [(str (keywords/safe-name k)) (str (keywords/safe-name v))])
+    [k (str (keywords/safe-name v))])
 
 (defn ^:private parse-qp [s]
     (->> (string/split s #"&")
@@ -26,8 +26,8 @@
       ["login" :login]
       ["logout" :logout]
       ["repos"
-       ["" :repos]
-       [["/" [#"[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}" :repo-id]] :repo]]
+       [["" :repos]
+        [["/" [#"[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}" :repo-id]] :repo]]]
       [true :not-found]]])
 
 (defn match-route [path]

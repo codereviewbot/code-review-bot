@@ -7,7 +7,7 @@
 
 (def ^:private store (collaj/create-custom-store r/atom
                          reducers/root
-                         com.ben-allred.collaj.enhancers/with-fn-dispatch
+                         collaj.enhancers/with-fn-dispatch
                          (collaj.enhancers/with-log-middleware (comp js/console.log pr-str))))
 
 (def get-state (:get-state store))
