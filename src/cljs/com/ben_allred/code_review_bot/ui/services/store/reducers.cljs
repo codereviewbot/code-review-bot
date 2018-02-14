@@ -37,4 +37,4 @@
             state)))
 
 (def root
-    (collaj.reducers/combine (maps/->map page repo repos user)))
+    (collaj.reducers/combine {:page page :repo repo :repos repos :user user}))

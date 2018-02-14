@@ -23,7 +23,7 @@
 
 (defn ^:private wrap-message [commit message]
     (str "I have reviewed the code in your commit:\n"
-        "\n<" (:url commit) "|" (:message (log/spy commit)) ">"
+        "\n<" (:url commit) "|" (:message commit) ">"
         "\n> " message))
 
 (defn ^:private handle-integration [config {:keys [commit] :as payload}]

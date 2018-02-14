@@ -18,10 +18,3 @@
 
 (defn update-all [m f & f-args]
     (map-vals #(apply f % f-args) m))
-
-(defmacro ->map [& vars]
-    (loop [m nil [v & more :as vars] vars]
-        (cond
-            (empty? vars) m
-            (symbol? v) (recur (assoc m (keyword (name v)) v) more)
-            :else (recur (assoc m v (first more)) (rest more)))))
