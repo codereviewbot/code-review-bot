@@ -1,0 +1,23 @@
+.pure-button {
+    &.button-success {
+        background: rgb(28, 184, 65);
+    }
+    &.button-error {
+        background: rgb(202, 60, 60);
+        color: white;
+    }
+    &.button-warning {
+        background: rgb(223, 117, 20);
+        color: white;
+    }
+    &.button-secondary {
+        background: rgb(66, 184, 221);
+    }
+}
+
+.button-row {
+    margin: 5px 0;
+    & > *:not(:last-child) {
+        margin-right: 10px;
+    }
+}

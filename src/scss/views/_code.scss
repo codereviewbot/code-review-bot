@@ -1,0 +1,12 @@
+.code {
+    font-family: Lucida Console, Monaco, Courier;
+    &.keyword {
+        color: #b0b;
+    }
+    &.brace {
+        color: #666;
+    }
+    &.pr-str {
+        color: #0b0;
+    }
+}
