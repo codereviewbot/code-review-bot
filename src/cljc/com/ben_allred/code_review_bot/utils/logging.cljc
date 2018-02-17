@@ -3,7 +3,8 @@
               [com.ben-allred.code-review-bot.utils.maps :as maps]
               [clojure.string :as string]
               [com.ben-allred.code-review-bot.utils.strings :as strings]
-              [com.ben-allred.code-review-bot.utils.colors :as colors]))
+              [com.ben-allred.code-review-bot.utils.colors :as colors]
+              [kvlt.core :refer [quiet!]]))
 
 (defmacro debug [& args]
     `(logger/debug ~@args))
@@ -51,6 +52,8 @@
                                      :cljs (seq (map no-color vargs)))
                                 (level-color level)
                                 (ns-color (or ?ns-str "ns?"))))))
+
+(quiet!)
 
 (logger/merge-config!
     {:level      :debug
