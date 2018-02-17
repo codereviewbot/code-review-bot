@@ -14,6 +14,8 @@
                    [com.ben-allred/collaj "0.4.0"]
                    [com.novemberain/monger "3.1.0" :exclusions [com.google.guava/guava]]
                    [com.taoensso/timbre "4.10.0"]
+                   [com.cognitect/transit-clj "0.8.300"]
+                   [com.cognitect/transit-cljs "0.8.243"]
                    [compojure "1.6.0"]
                    [environ "1.1.0"]
                    [http-kit "2.1.18"]

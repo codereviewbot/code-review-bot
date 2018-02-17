@@ -4,7 +4,6 @@
     (:require [compojure.handler :refer [site]]
               [compojure.route :as route]
               [ring.middleware.reload :refer [wrap-reload]]
-              [ring.middleware.json :refer [wrap-json-body wrap-json-response]]
               [clojure.tools.nrepl.server :as nrepl]
               [com.ben-allred.code-review-bot.auth.core :as auth]
               [com.ben-allred.code-review-bot.api.hooks :as hooks]
@@ -25,10 +24,9 @@
 
 (def ^:private app
     (-> #'base
-        (wrap-json-response)
-        (wrap-json-body {:keywords? true :bigdecimals? true})
         (middleware/log-response)
         (middleware/decode-jwt)
+        (middleware/transit)
         (site)))
 
 (defn ^:private run [app]
