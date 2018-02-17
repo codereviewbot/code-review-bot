@@ -2,8 +2,8 @@
     :description "Application simulator"
     :license {:name "Eclipse Public License"
               :url  "http://www.eclipse.org/legal/epl-v10.html"}
-    :main com.ben-allred.code-review-bot.api.core
-    :aot [com.ben-allred.code-review-bot.api.core]
+    :main com.ben-allred.code-review-bot.api.server
+    :aot [com.ben-allred.code-review-bot.api.server]
     :min-lein-version "2.6.1"
 
     :dependencies [[bidi "2.1.3"]

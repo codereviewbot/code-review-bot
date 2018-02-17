@@ -1,4 +1,4 @@
-(ns com.ben-allred.code-review-bot.api.core
+(ns com.ben-allred.code-review-bot.api.server
     (:gen-class)
     (:use compojure.core org.httpkit.server)
     (:require [compojure.handler :refer [site]]
