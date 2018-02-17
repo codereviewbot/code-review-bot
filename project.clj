@@ -69,18 +69,18 @@
              "sass"   ["lein" "sass" "watch"]
              "server" ["lein" "run"]}
 
-    :profiles {:dev {:dependencies  [[binaryage/devtools "0.9.4"]
-                                     [figwheel-sidecar "0.5.14"]
-                                     [com.cemerick/piggieback "0.2.2"]]
-                     :main          com.ben-allred.code-review-bot.core/-dev
-                     :source-paths  ["src/clj" "src/cljs" "src/cljc"]
-                     :plugins       [[cider/cider-nrepl "0.12.0"]]
-                     :clean-targets ^{:protect false} ["resources/public/js"
-                                                       "resources/public/css"
-                                                       :target-path]
-                     :repl-options  {:nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}}
-               :deploy {:clean-targets ^{:protect false} ["resources/public/js"
-                                                          "resources/public/css"
-                                                          :target-path]
-                        :sass {:style :compressed}
-                        :prep-tasks ["compile" ["cljsbuild" "once" "min"] ["sass" "once"]]}})
+    :profiles {:dev     {:dependencies  [[binaryage/devtools "0.9.4"]
+                                         [figwheel-sidecar "0.5.14"]
+                                         [com.cemerick/piggieback "0.2.2"]]
+                         :main          com.ben-allred.code-review-bot.api.server/-dev
+                         :source-paths  ["src/clj" "src/cljs" "src/cljc"]
+                         :plugins       [[cider/cider-nrepl "0.12.0"]]
+                         :clean-targets ^{:protect false} ["resources/public/js"
+                                                           "resources/public/css"
+                                                           :target-path]
+                         :repl-options  {:nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}}
+               :uberjar {:clean-targets ^{:protect false} ["resources/public/js"
+                                                           "resources/public/css"
+                                                           :target-path]
+                         :sass          {:style :compressed}
+                         :prep-tasks    ["compile" ["cljsbuild" "once" "min"] ["sass" "once"]]}})
