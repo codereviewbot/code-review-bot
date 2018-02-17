@@ -1,4 +1,4 @@
-(ns com.ben-allred.code-review-bot.utils.env
+(ns com.ben-allred.code-review-bot.api.utils.env
     (:require [environ.core :as env]))
 
 (def env env/env)

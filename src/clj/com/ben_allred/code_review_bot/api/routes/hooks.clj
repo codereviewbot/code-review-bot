@@ -1,12 +1,12 @@
-(ns com.ben-allred.code-review-bot.api.hooks
+(ns com.ben-allred.code-review-bot.api.routes.hooks
     (:use compojure.core)
     (:require
         [com.ben-allred.code-review-bot.utils.logging :as log]
-        [com.ben-allred.code-review-bot.services.rules :as rules]
+        [com.ben-allred.code-review-bot.api.services.rules :as rules]
         [clojure.string :as string]
         [clojure.set :as set]
-        [com.ben-allred.code-review-bot.services.slack :as slack]
-        [com.ben-allred.code-review-bot.db.models.configs :as configs]
+        [com.ben-allred.code-review-bot.api.services.slack :as slack]
+        [com.ben-allred.code-review-bot.api.db.models.configs :as configs]
         [com.ben-allred.code-review-bot.utils.strings :as strings]))
 
 (defn ^:private ref->branch [ref]

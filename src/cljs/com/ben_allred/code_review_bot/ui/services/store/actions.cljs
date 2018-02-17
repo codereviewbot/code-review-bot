@@ -1,34 +1,38 @@
 (ns com.ben-allred.code-review-bot.ui.services.store.actions
-    (:require [com.ben-allred.code-review-bot.ui.utils.http :as http]))
+    (:require [com.ben-allred.code-review-bot.services.http :as http]
+              [cljs.core.async :as async]))
 
-(defn ^:private cb [dispatch type]
-    (comp dispatch (partial conj [type])))
+(defn ^:private request* [request dispatch success-type error-type]
+    (async/go
+        (let [[status result] (async/<! request)]
+            (dispatch (if (= :success status)
+                          [success-type result]
+                          [error-type result])))))
 
 (def request-user-details
     (fn [[dispatch]]
         (dispatch [:user/request])
-        (http/get "/auth/details"
-            (cb dispatch :user/succeed)
-            (cb dispatch :user/fail))))
+        (request* (http/get "/auth/details") dispatch :user/succeed :user/fail)))
 
 (def request-repos
     (fn [[dispatch]]
         (dispatch [:repos/request])
-        (http/get "/api/repos"
-            (cb dispatch :repos/succeed)
-            (cb dispatch :repos/fail))))
+        (-> "/api/repos"
+            (http/get)
+            (request* dispatch :repos/succeed :repos/fail))))
 
 (defn request-repo [repo-id]
     (fn [[dispatch]]
         (dispatch [:repo/request])
-        (http/get (str "/api/repos/" repo-id)
-            (cb dispatch :repo/succeed)
-            (cb dispatch :repo/fail))))
+        (-> "/api/repos/"
+            (str repo-id)
+            (http/get)
+            (request* dispatch :repo/succeed :repo/fail))))
 
 (defn update-repo [repo-id repo]
     (fn [[dispatch]]
         (dispatch [:repo/update])
-        (http/patch (str "/api/repos/" repo-id)
-            {:body repo}
-            (cb dispatch :repo/succeed)
-            (cb dispatch :repo/fail))))
+        (-> "/api/repos/"
+            (str repo-id)
+            (http/patch {:body repo})
+            (request* dispatch :repo/succeed :repo/fail))))

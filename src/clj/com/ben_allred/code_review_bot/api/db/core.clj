@@ -1,6 +1,6 @@
-(ns com.ben-allred.code-review-bot.db.core
-    (:require [com.ben-allred.code-review-bot.db.models.users :as users]
-              [com.ben-allred.code-review-bot.db.models.configs :as configs]))
+(ns com.ben-allred.code-review-bot.api.db.core
+    (:require [com.ben-allred.code-review-bot.api.db.models.users :as users]
+              [com.ben-allred.code-review-bot.api.db.models.configs :as configs]))
 
 (defn ^:private find-user-repos [email]
     (->> email

@@ -2,23 +2,22 @@
     :description "Application simulator"
     :license {:name "Eclipse Public License"
               :url  "http://www.eclipse.org/legal/epl-v10.html"}
-    :main com.ben-allred.code-review-bot.core
-    :aot [com.ben-allred.code-review-bot.core]
+    :main com.ben-allred.code-review-bot.api.core
+    :aot [com.ben-allred.code-review-bot.api.core]
     :min-lein-version "2.6.1"
 
     :dependencies [[bidi "2.1.3"]
-                   [clj-http "3.7.0"]
                    [clj-jwt "0.1.1"]
                    [clj-time "0.6.0"]
-                   [cljs-http "0.1.43"]
                    [com.ben-allred/collaj "0.4.0"]
-                   [com.novemberain/monger "3.1.0" :exclusions [com.google.guava/guava]]
-                   [com.taoensso/timbre "4.10.0"]
                    [com.cognitect/transit-clj "0.8.300"]
                    [com.cognitect/transit-cljs "0.8.243"]
+                   [com.novemberain/monger "3.1.0" :exclusions [com.google.guava/guava]]
+                   [com.taoensso/timbre "4.10.0"]
                    [compojure "1.6.0"]
                    [environ "1.1.0"]
                    [http-kit "2.1.18"]
+                   [io.nervous/kvlt "0.1.4"]
                    [kibu/pushy "0.3.8"]
                    [metosin/jsonista "0.1.1"]
                    [org.clojure/clojure "1.9.0"]

@@ -1,6 +1,6 @@
-(ns com.ben-allred.code-review-bot.db.models.configs
+(ns com.ben-allred.code-review-bot.api.db.models.configs
     (:require [com.ben-allred.code-review-bot.utils.maps :as maps]
-              [com.ben-allred.code-review-bot.services.mongo :as mongo]
+              [com.ben-allred.code-review-bot.api.services.mongo :as mongo]
               [com.ben-allred.code-review-bot.utils.uuids :as uuids]
               [clojure.set :as set]))
 

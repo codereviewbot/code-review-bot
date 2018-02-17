@@ -1,15 +1,16 @@
-(ns com.ben-allred.code-review-bot.core
+(ns com.ben-allred.code-review-bot.api.core
     (:gen-class)
     (:use compojure.core org.httpkit.server)
     (:require [compojure.handler :refer [site]]
               [compojure.route :as route]
               [ring.middleware.reload :refer [wrap-reload]]
+              [ring.middleware.json :as mw.json]
               [clojure.tools.nrepl.server :as nrepl]
-              [com.ben-allred.code-review-bot.auth.core :as auth]
-              [com.ben-allred.code-review-bot.api.hooks :as hooks]
-              [com.ben-allred.code-review-bot.api.repos :as repos]
-              [com.ben-allred.code-review-bot.services.middleware :as middleware]
-              [com.ben-allred.code-review-bot.utils.env :as env]
+              [com.ben-allred.code-review-bot.api.auth.core :as auth]
+              [com.ben-allred.code-review-bot.api.routes.hooks :as hooks]
+              [com.ben-allred.code-review-bot.api.routes.repos :as repos]
+              [com.ben-allred.code-review-bot.api.services.middleware :as middleware]
+              [com.ben-allred.code-review-bot.api.utils.env :as env]
               [ring.util.response :as response]
               [com.ben-allred.code-review-bot.utils.logging :as log]))
 
@@ -26,7 +27,7 @@
     (-> #'base
         (middleware/log-response)
         (middleware/decode-jwt)
-        (middleware/transit)
+        (middleware/content-type)
         (site)))
 
 (defn ^:private run [app]

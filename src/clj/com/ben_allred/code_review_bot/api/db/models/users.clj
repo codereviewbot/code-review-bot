@@ -1,5 +1,5 @@
-(ns com.ben-allred.code-review-bot.db.models.users
-    (:require [com.ben-allred.code-review-bot.services.mongo :as mongo]
+(ns com.ben-allred.code-review-bot.api.db.models.users
+    (:require [com.ben-allred.code-review-bot.api.services.mongo :as mongo]
               [clojure.set :as set]))
 
 (defn find-by-email [email]

@@ -1,5 +1,5 @@
-(ns com.ben-allred.code-review-bot.services.slack
-    (:require [com.ben-allred.code-review-bot.utils.http :as http]))
+(ns com.ben-allred.code-review-bot.api.services.slack
+    (:require [com.ben-allred.code-review-bot.services.http :as http]))
 
 (def url "https://hooks.slack.com")
 

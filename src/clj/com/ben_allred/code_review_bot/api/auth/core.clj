@@ -1,9 +1,9 @@
-(ns com.ben-allred.code-review-bot.auth.core
+(ns com.ben-allred.code-review-bot.api.auth.core
     (:use [compojure.core])
     (:require [ring.util.response :as resp]
               [com.ben-allred.code-review-bot.utils.logging :as log]
-              [com.ben-allred.code-review-bot.utils.env :as env]
-              [com.ben-allred.code-review-bot.services.jwt :as jwt]))
+              [com.ben-allred.code-review-bot.api.utils.env :as env]
+              [com.ben-allred.code-review-bot.api.services.jwt :as jwt]))
 
 (defn ^:private token->cookie [resp value]
     (->> value

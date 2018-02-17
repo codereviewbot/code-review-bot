@@ -1,8 +1,8 @@
-(ns com.ben-allred.code-review-bot.api.repos
+(ns com.ben-allred.code-review-bot.api.routes.repos
     (:use [compojure.core])
-    (:require [com.ben-allred.code-review-bot.db.core :as db]
-              [com.ben-allred.code-review-bot.db.models.users :as users]
-              [com.ben-allred.code-review-bot.db.models.configs :as configs]))
+    (:require [com.ben-allred.code-review-bot.api.db.core :as db]
+              [com.ben-allred.code-review-bot.api.db.models.users :as users]
+              [com.ben-allred.code-review-bot.api.db.models.configs :as configs]))
 
 (defroutes repos
     (GET "/" req

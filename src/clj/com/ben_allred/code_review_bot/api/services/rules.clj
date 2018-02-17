@@ -1,4 +1,4 @@
-(ns com.ben-allred.code-review-bot.services.rules
+(ns com.ben-allred.code-review-bot.api.services.rules
     (:require [com.ben-allred.code-review-bot.utils.logging :as log]))
 
 (defn ^:private rule->fn [payload]

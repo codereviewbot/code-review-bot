@@ -2,7 +2,7 @@
     (:require [com.ben-allred.code-review-bot.ui.services.navigation :as nav]
               [com.ben-allred.code-review-bot.ui.services.store.actions :as actions]
               [com.ben-allred.code-review-bot.ui.services.store.core :as store]
-              [com.ben-allred.code-review-bot.ui.utils.http :as http]
+              [com.ben-allred.code-review-bot.services.http :as http]
               [com.ben-allred.code-review-bot.ui.views.auth :as auth]
               [com.ben-allred.code-review-bot.ui.views.components.core :as components]
               [com.ben-allred.code-review-bot.ui.views.error :as error]
