@@ -1,6 +1,7 @@
 (ns com.ben-allred.code-review-bot.db.models.configs
     (:require [com.ben-allred.code-review-bot.utils.maps :as maps]
               [com.ben-allred.code-review-bot.services.mongo :as mongo]
+              [com.ben-allred.code-review-bot.utils.uuids :as uuids]
               [clojure.set :as set]))
 
 (defn ^:private keywordify [rules]
@@ -22,6 +23,9 @@
 
 (defn find-by-repo [repo]
     (find-one {:repo-url repo}))
+
+(defn find-by-id [id]
+    (find-one {:_id (uuids/->uuid id)}))
 
 (defn find-by-repos [repos]
     (find-many {:repo-url {:$in repos}}))

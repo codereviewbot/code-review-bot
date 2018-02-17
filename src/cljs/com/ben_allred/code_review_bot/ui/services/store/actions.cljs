@@ -24,3 +24,11 @@
         (http/get (str "/api/repos/" repo-id)
             (cb dispatch :repo/succeed)
             (cb dispatch :repo/fail))))
+
+(defn update-repo [repo-id repo]
+    (fn [[dispatch]]
+        (dispatch [:repo/update])
+        (http/patch (str "/api/repos/" repo-id)
+            {:body repo}
+            (cb dispatch :repo/succeed)
+            (cb dispatch :repo/fail))))

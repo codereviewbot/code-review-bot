@@ -4,11 +4,12 @@
               [com.ben-allred.code-review-bot.ui.views.rules :as rules]))
 
 (defn root [state]
-    (store/dispatch (actions/request-repo (get-in state [:page :route-params :repo-id])))
-    (fn [{{:keys [description rules repo-url] :as repo} :repo :as state}]
-        [:div
-         [:h2 "Repo"]
-         [:div description]
-         [:div [:a {:href repo-url}
-                repo-url]]
-         [rules/display rules]]))
+    (let [repo-id (get-in state [:page :route-params :repo-id])]
+        (store/dispatch (actions/request-repo (get-in state [:page :route-params :repo-id])))
+        (fn [{{:keys [description rules repo-url] :as repo} :repo :as state}]
+            [:div
+             [:h2 "Repo"]
+             [:div description]
+             [:div [:a {:href repo-url}
+                    repo-url]]
+             [rules/display repo-id rules]])))

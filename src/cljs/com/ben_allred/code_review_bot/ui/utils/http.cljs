@@ -13,3 +13,9 @@
         (let [response (async/<! (client/get url))
               cb (if (success? response) success-cb error-cb)]
             (cb (:body response)))))
+
+(defn patch [url data success-cb error-cb]
+    (async/go
+        (let [response (async/<! (client/patch url data))
+              cb (if (success? response) success-cb error-cb)]
+            (cb (:body response)))))
