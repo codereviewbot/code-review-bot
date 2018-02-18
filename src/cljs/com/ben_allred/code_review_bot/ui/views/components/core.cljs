@@ -3,7 +3,21 @@
 
 
 (defn spinner []
-    [:div.loader "Loading..."])
+    [:div.loader
+     "Loading..."])
+
+(defn spinner-overlay [show? component]
+    (if show?
+        [:div
+         {:style {:position :relative}}
+         [:div
+          {:style {:position :absolute :min-height "100%" :min-width "100%"}}
+          [spinner]]
+         [:div
+          {:style {:position :absolute :min-height "100%" :min-width "100%" :background-color "rgba(0,0,0,0.25)"}}
+          ""]
+         component]
+        component))
 
 (defn vector [coll]
     (-> [:span.code.vector [:span.code.brace "["]]

@@ -10,13 +10,13 @@
       (or description repo-url)]])
 
 (defn root [state]
-    (store/dispatch actions/request-repos)
-    (fn [{:keys [repos] :as state}]
+    (store/dispatch actions/request-configs)
+    (fn [{:keys [configs] :as state}]
         [:div
          [:h2 "Your Projects"]
-         (if (keyword? repos)
-             [components/spinner]
+         (if (= :available (:status configs))
              [:ul
-              (for [repo-data repos]
-                  [:li {:key (:id repo-data)}
-                   [repo repo-data]])])]))
+              (for [config (:data configs)]
+                  [:li {:key (:id config)}
+                   [repo config]])]
+             [components/spinner])]))

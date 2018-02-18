@@ -28,9 +28,9 @@
         (let [{:keys [user] :as state} (store/get-state)
               component (components (get-in state [:page :handler]) error/not-found)]
             [:div.app
-             (case user
-                 :requesting [components/spinner]
-                 :failed [error/not-logged-in]
+             (case (:status user)
+                 :pending [components/spinner]
+                 :error [error/not-logged-in]
                  [:div
                   [:header
                    [:h1 "Code Review Bot"]

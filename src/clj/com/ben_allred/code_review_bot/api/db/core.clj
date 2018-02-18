@@ -2,19 +2,19 @@
     (:require [com.ben-allred.code-review-bot.api.db.models.users :as users]
               [com.ben-allred.code-review-bot.api.db.models.configs :as configs]))
 
-(defn ^:private find-user-repos [email]
+(defn ^:private find-user-configs [email]
     (->> email
         (users/find-by-email)
         (:repos)
         (configs/find-by-repos)))
 
-(defn find-repos-for-user-by-email [email]
+(defn find-configs-for-user-by-email [email]
     (->> email
-        (find-user-repos)
+        (find-user-configs)
         (map #(select-keys % [:id :description]))))
 
-(defn find-repo-for-user-by-email [email repo-id]
+(defn find-config-for-user-by-email [email repo-id]
     (->> email
-        (find-user-repos)
+        (find-user-configs)
         (filter (comp (partial = repo-id) str :id))
         (first)))

@@ -16,13 +16,13 @@
   &:before, &:after {
     position: absolute;
     content: '';
-  }
-  &:before {
     width: 5.2em;
     height: 10.2em;
-    background: #fff;
-    border-radius: 10.2em 0 0 10.2em;
     top: -0.1em;
+    background: #fff;
+  }
+  &:before {
+    border-radius: 10.2em 0 0 10.2em;
     left: -0.1em;
     -webkit-transform-origin: 5.2em 5.1em;
     transform-origin: 5.2em 5.1em;
@@ -30,11 +30,7 @@
     animation: load2 2s infinite ease 1.5s;
   }
   &:after {
-    width: 5.2em;
-    height: 10.2em;
-    background: #fff;
     border-radius: 0 10.2em 10.2em 0;
-    top: -0.1em;
     left: 5.1em;
     -webkit-transform-origin: 0px 5.1em;
     transform-origin: 0px 5.1em;

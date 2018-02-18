@@ -6,10 +6,10 @@
             idx-1 (get coll idx-2)
             idx-2 (get coll idx-1))
         (->> coll
-            (map-indexed #(case %1
-                              idx-1 (nth coll idx-2)
-                              idx-2 (nth coll idx-1)
-                              %2)))))
+            (map-indexed #(cond
+                              (= %1 idx-1) (nth coll idx-2)
+                              (= %1 idx-2) (nth coll idx-1)
+                              :else %2)))))
 
 (defn exclude [coll idx]
     (cond-> coll

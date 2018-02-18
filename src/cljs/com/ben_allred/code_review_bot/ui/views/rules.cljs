@@ -10,7 +10,7 @@
                      (colls/exclude rules from)
                      (colls/swap rules from to))]
         (->> {:rules rules'}
-            (actions/update-repo repo-id)
+            (actions/update-config repo-id)
             (store/dispatch))))
 
 (defn ^:private move-up [repo-id rules idx]
@@ -25,7 +25,7 @@
      [:ul.rule
       (let [last-idx (dec (count rules))]
           (for [[idx [result conditions]] (map vector (range) rules)]
-              [:li.rule-text {:key (pr-str {:result result :conditions conditions})}
+              [:li.rule-text {:key (pr-str [result conditions])}
                [:span
                 {:style {:font-size :larger :font-weight :bold}}
                 [components/keyword result]]
@@ -34,11 +34,11 @@
                    " always."
                    [:ul.conditions
                     (for [[idx [path condition]] (map vector (range) conditions)]
-                        [:li {:key (pr-str {:result result :path path :condition condition})}
+                        [:li {:key (pr-str [result path condition])}
                          (if (zero? idx)
                              "when "
                              " and ")
-                         [components/vector (map (comp #(vary-meta % assoc :key (gensym)) components/keyword) path)]
+                         [components/vector (map-indexed #(with-meta [components/keyword %2] {:key %1}) path)]
                          " matches "
                          [components/pr-str condition]])])
                [:div.button-row

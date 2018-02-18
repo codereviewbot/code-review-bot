@@ -14,25 +14,25 @@
         (dispatch [:user/request])
         (request* (http/get "/auth/details") dispatch :user/succeed :user/fail)))
 
-(def request-repos
+(def request-configs
     (fn [[dispatch]]
-        (dispatch [:repos/request])
-        (-> "/api/repos"
+        (dispatch [:configs/request])
+        (-> "/api/configs"
             (http/get)
-            (request* dispatch :repos/succeed :repos/fail))))
+            (request* dispatch :configs/succeed :configs/fail))))
 
-(defn request-repo [repo-id]
+(defn request-config [config-id]
     (fn [[dispatch]]
-        (dispatch [:repo/request])
-        (-> "/api/repos/"
-            (str repo-id)
+        (dispatch [:config/request])
+        (-> "/api/configs/"
+            (str config-id)
             (http/get)
-            (request* dispatch :repo/succeed :repo/fail))))
+            (request* dispatch :config/succeed :config/fail))))
 
-(defn update-repo [repo-id repo]
+(defn update-config [config-id config]
     (fn [[dispatch]]
-        (dispatch [:repo/update])
-        (-> "/api/repos/"
-            (str repo-id)
-            (http/patch {:body repo})
-            (request* dispatch :repo/succeed :repo/fail))))
+        (dispatch [:config/update])
+        (-> "/api/configs/"
+            (str config-id)
+            (http/patch {:body {:data config}})
+            (request* dispatch :config/succeed :config/fail))))

@@ -9,32 +9,33 @@
          :router/navigate page
          state)))
 
-(defn repo
-    ([] [])
-    ([state [type repo]]
+(defn config
+    ([] {:status :init :data nil})
+    ([state [type config]]
      (case type
-         :repo/request :requesting
-         :repo/fail :failed
-         :repo/succeed (:data repo)
+         :config/request (assoc state :status :pending)
+         :config/update (assoc state :status :pending)
+         :config/fail (assoc state :status :error)
+         :config/succeed {:status :available :data (:data config)}
          state)))
 
-(defn repos
-    ([] [])
-    ([state [type repos]]
+(defn configs
+    ([] {:status :init :data nil})
+    ([state [type configs]]
      (case type
-         :repos/request :requesting
-         :repos/fail :failed
-         :repos/succeed (:data repos)
+         :configs/request (assoc state :status :pending)
+         :configs/fail (assoc state :status :error)
+         :configs/succeed {:status :available :data (:data configs)}
          state)))
 
 (defn user
-    ([] nil)
+    ([] {:status :init :data nil})
     ([state [type user]]
         (case type
-            :user/request :requesting
-            :user/fail :failed
-            :user/succeed (:data user)
+            :user/request (assoc state :status :pending)
+            :user/fail (assoc state :status :error)
+            :user/succeed {:status :available :data (:data user)}
             state)))
 
 (def root
-    (collaj.reducers/combine {:page page :repo repo :repos repos :user user}))
+    (collaj.reducers/combine {:page page :config config :configs configs :user user}))

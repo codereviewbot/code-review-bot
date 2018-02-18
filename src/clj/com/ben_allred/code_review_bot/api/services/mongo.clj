@@ -26,5 +26,5 @@
 (def insert
     (partial mc/insert @db))
 
-(def update
-    (partial mc/update @db))
+(defn update [coll query document]
+    (mc/find-and-modify @db coll query document {:return-new true}))

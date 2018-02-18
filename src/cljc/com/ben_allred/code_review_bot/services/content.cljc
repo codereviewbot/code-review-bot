@@ -4,8 +4,12 @@
               [com.ben-allred.code-review-bot.utils.transit :as transit]
               [com.ben-allred.code-review-bot.utils.logging :as log]))
 
+(def ^:private header-keys
+    #?(:clj #{"content-type" "accept"}
+       :cljs #{:content-type :accept}))
+
 (defn ^:private with-headers [request type]
-    (update request :headers assoc "Content-type" type "Accept" type))
+    (update request :headers merge (zipmap header-keys (repeat type))))
 
 (def ^:private json?
     (comp (partial re-find #"application/json") str))
