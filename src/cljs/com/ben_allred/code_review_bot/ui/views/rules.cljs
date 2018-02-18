@@ -4,7 +4,9 @@
               [com.ben-allred.code-review-bot.ui.services.store.actions :as actions]
               [com.ben-allred.code-review-bot.utils.colls :as colls]
               [com.ben-allred.code-review-bot.ui.views.components.form :as form]
-              [com.ben-allred.code-review-bot.utils.logging :as log]))
+              [com.ben-allred.code-review-bot.utils.logging :as log]
+              [com.ben-allred.code-review-bot.utils.keywords :as keywords]
+              [com.ben-allred.code-review-bot.ui.services.transformations :as transformations]))
 
 (defn ^:private update-rules [repo-id rules]
     (->> {:rules rules}
@@ -31,43 +33,80 @@
                              existing)))
         (update-rules repo-id)))
 
+(defn ^:private change-in [repo-id rules path new-value]
+    (->> new-value
+        (colls/assoc-in rules path)
+        (update-rules repo-id)))
+
+(defn path [repo-id rules idx idx' path]
+    [form/editable
+     path
+     {:on-submit   (partial change-in repo-id rules [idx 1 idx' 0])
+      :transformer (transformations/vector transformations/keyword)}
+     [components/vector
+      (for [[idx'' k] (map-indexed vector path)]
+          ^{:key (pr-str [idx idx' idx'' k])}
+          [components/keyword k])]]
+    #_[components/vector
+     (for [[idx'' k] (map-indexed vector path)]
+         ^{:key (pr-str [idx idx' idx'' k])}
+         [form/editable
+          (keywords/safe-name k)
+          {:on-submit (partial change-in repo-id rules [idx 1 idx' 0 idx''])}
+          [components/keyword k]])])
+
+(defn condition [repo-id rules idx idx' data-path match]
+    [:li
+     (if (zero? idx')
+         "when "
+         "and ")
+     [path repo-id rules idx idx' data-path]
+     #_[components/vector (map-indexed #(with-meta [components/keyword %2] {:key %1}) data-path)]
+     " matches "
+     [form/editable
+      match
+      {:on-submit (partial change-in repo-id rules [idx 1 idx' 1])}
+      [components/pr-str match]]])
+
+(defn button-row [repo-id rules idx]
+    (let [last-idx (dec (count rules))]
+        [:div.button-row
+         (when-not (zero? idx)
+             [:button.pure-button.button-warning
+              {:on-click (fn [] (move-up repo-id rules idx))}
+              [:i.fa.fa-arrow-up]])
+         (when (not= idx last-idx)
+             [:button.pure-button.button-warning
+              {:on-click (fn [] (move-down repo-id rules idx))}
+              [:i.fa.fa-arrow-down]])
+         [:button.pure-button.button-error
+          {:on-click (fn [] (move repo-id rules idx nil))}
+          [:i.fa.fa-minus-circle]]]))
+
+(defn rule [conditions repo-id rules idx result]
+    [:li.rule-text
+     [form/editable
+      result
+      {:on-submit (partial change-result repo-id rules idx)
+       :transformer transformations/keyword}
+      [:span.result
+       [components/keyword result]]]
+     " happens"
+     (if (empty? conditions)
+         " always."
+         [:ul.conditions
+          (for [[idx' [path match]] (map-indexed vector conditions)]
+              ^{:key (pr-str [result path match])}
+              [condition repo-id rules idx idx' path match])])
+     [button-row repo-id rules idx]])
+
 (defn display [repo-id rules]
     [:div.rules
      [:h3 "Rules:"]
      [:ul.rule
-      (let [last-idx (dec (count rules))]
-          (for [[idx [result conditions]] (map vector (range) rules)]
-              [:li.rule-text {:key (pr-str [result conditions])}
-               [form/editable
-                result
-                {:on-submit (partial change-result repo-id rules idx)}
-                [:span
-                 {:style {:font-size :larger :font-weight :bold}}
-                 [components/keyword result]]]
-               " happens"
-               (if (empty? conditions)
-                   " always."
-                   [:ul.conditions
-                    (for [[idx [path condition]] (map vector (range) conditions)]
-                        [:li {:key (pr-str [result path condition])}
-                         (if (zero? idx)
-                             "when "
-                             " and ")
-                         [components/vector (map-indexed #(with-meta [components/keyword %2] {:key %1}) path)]
-                         " matches "
-                         [components/pr-str condition]])])
-               [:div.button-row
-                (when-not (zero? idx)
-                    [:button.pure-button.button-warning
-                     {:on-click (fn [] (move-up repo-id rules idx))}
-                     [:i.fa.fa-arrow-up]])
-                (when (not= idx last-idx)
-                    [:button.pure-button.button-warning
-                     {:on-click (fn [] (move-down repo-id rules idx))}
-                     [:i.fa.fa-arrow-down]])
-                [:button.pure-button.button-error
-                 {:on-click (fn [] (move repo-id rules idx nil))}
-                 [:i.fa.fa-minus-circle]]]]))]
+      (for [[idx [result conditions]] (map-indexed vector rules)]
+          ^{:key (pr-str [result conditions])}
+          [rule conditions repo-id rules idx result])]
      [:div.button-row
       [:button.pure-button.pure-button-primary
        [:i.fa.fa-plus-circle]]]])
