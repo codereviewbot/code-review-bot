@@ -16,10 +16,10 @@
         (last)
         (strings/trim-to-nil)))
 
-(defn ^:private req->payload [{:keys [body]}]
-    {:branch     (ref->branch (:ref body))
-     :commit     (:head_commit body)
-     :repository (:repository body)})
+(defn ^:private req->payload [{{:keys [ref head_commit repository]} :body}]
+    {:branch     (ref->branch ref)
+     :commit     (select-keys head_commit [:committer :author :url :message :timestamp])
+     :repository (select-keys repository [:description :url :updated_at :pushed_at :full_name])})
 
 (defn ^:private wrap-message [commit message]
     (str "I have reviewed the code in your commit:\n"
@@ -35,7 +35,7 @@
 
 (def webhooks
     (POST "/git" req
-        (let [repo-url (get-in req [:body :repository :html_url])
+        (let [repo-url (get-in req [:body :repository :url])
               config   (configs/find-by-repo repo-url)
               payload  (req->payload req)]
             (log/info "received payload:" payload)
