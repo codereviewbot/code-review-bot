@@ -10,6 +10,21 @@
         #?(:clj  [clojure.core.async :as async]
            :cljs [cljs.core.async :as async])))
 
+(def ^:private status->kw
+    {200 :ok
+     201 :created
+     202 :accepted
+     204 :no-content
+     400 :bad-request
+     401 :unauthorized
+     404 :not-found
+     409 :conflict
+     424 :failed-dependency
+     500 :internal-server-error
+     501 :not-implemented
+     503 :service-unavailable
+     504 :gateway-timeout})
+
 (def ^:private success?
     (comp #{200 201 202 204} :status))
 
@@ -22,16 +37,17 @@
 
 (defn ^:private request* [method url request]
     (async/go
-        (let [response (async/<! (-> request
-                                     (assoc :method method :url url)
-                                     (content/prepare content-type)
-                                     (kvlt/request!)))
-              body     (-> response
-                           (content/parse (content-type-header response))
-                           (:body))]
+        (let [{:keys [status] :as response} (async/<! (-> request
+                                                          (assoc :method method :url url)
+                                                          (content/prepare content-type)
+                                                          (kvlt/request!)))
+              body   (-> response
+                         (content/parse (content-type-header response))
+                         (:body))
+              status (status->kw status status)]
             (if (success? response)
-                [:success body]
-                [:error body]))))
+                [:success body status response]
+                [:error body status response]))))
 
 (defn get [url]
     (request* :get url nil))
