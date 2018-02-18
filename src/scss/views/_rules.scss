@@ -14,8 +14,8 @@
             font-size: larger;
         }
         .editable:hover {
-            background-color: rgba(lightblue, 0.25);
-            box-shadow: 1px 1px 1px 1px rgba(lightblue, 0.25);
+            background-color: rgba($light-blue, 0.25);
+            box-shadow: 1px 1px 1px 1px rgba($light-blue, 0.25);
         }
     }
 }
