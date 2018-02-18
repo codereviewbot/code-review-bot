@@ -49,7 +49,6 @@
                                                (partial transformations/to-model transformer)))
                          (assoc-in [:style :min-width] (str (+ (* 8 (count transformed)) 50) "px"))
                          (dissoc :transformer))])
-                [:span.editable
-                 {:on-click #(reset! editing? true)
-                  :style    {:cursor :pointer}}
+                [:span.editable.button
+                 {:on-click #(reset! editing? true)}
                  component]))))

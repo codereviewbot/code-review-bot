@@ -53,3 +53,13 @@
                     (remove (comp (partial = idx) first))
                     (map second))
         (vector? coll) (vec)))
+
+(defn prepend [coll value]
+    (if (vector? coll)
+        (into [value] coll)
+        (conj coll value)))
+
+(defn append [coll value]
+    (if (or (list? coll) (seq? coll))
+        (concat coll [value])
+        (conj coll value)))

@@ -14,10 +14,22 @@
         (store/dispatch)))
 
 (defn ^:private move [repo-id rules from to]
-    (let [rules' (if (nil? to)
-                     (colls/exclude rules from)
-                     (colls/swap rules from to))]
-        (update-rules repo-id rules')))
+    (update-rules repo-id (colls/swap rules from to)))
+
+(defn ^:private delete [repo-id rules from]
+    (update-rules repo-id (colls/exclude rules from)))
+
+(defn ^:private delete-in [repo-id rules path]
+    (update-rules repo-id
+        (colls/update-in rules (butlast path) colls/exclude (last path))))
+
+(defn ^:private add-rule [repo-id rules]
+    (update-rules repo-id
+        (colls/append rules [:nothing ()])))
+
+(defn ^:private add-condition [repo-id rules idx]
+    (update-rules repo-id
+        (colls/update-in rules [idx 1] colls/append [() ""])))
 
 (defn ^:private move-up [repo-id rules idx]
     (move repo-id rules idx (dec idx)))
@@ -46,22 +58,16 @@
      [components/vector
       (for [[idx'' k] (map-indexed vector path)]
           ^{:key (pr-str [idx idx' idx'' k])}
-          [components/keyword k])]]
-    #_[components/vector
-     (for [[idx'' k] (map-indexed vector path)]
-         ^{:key (pr-str [idx idx' idx'' k])}
-         [form/editable
-          (keywords/safe-name k)
-          {:on-submit (partial change-in repo-id rules [idx 1 idx' 0 idx''])}
-          [components/keyword k]])])
+          [components/keyword k])]])
 
 (defn condition [repo-id rules idx idx' data-path match]
     [:li
+     [:i.fa.fa-minus-circle.red.button
+      {:on-click #(delete-in repo-id rules [idx 1 idx'])}]
      (if (zero? idx')
-         "when "
-         "and ")
+         " when "
+         " and ")
      [path repo-id rules idx idx' data-path]
-     #_[components/vector (map-indexed #(with-meta [components/keyword %2] {:key %1}) data-path)]
      " matches "
      [form/editable
       match
@@ -80,25 +86,31 @@
               {:on-click (fn [] (move-down repo-id rules idx))}
               [:i.fa.fa-arrow-down]])
          [:button.pure-button.button-error
-          {:on-click (fn [] (move repo-id rules idx nil))}
+          {:on-click (fn [] (delete repo-id rules idx))}
           [:i.fa.fa-minus-circle]]]))
 
 (defn rule [conditions repo-id rules idx result]
-    [:li.rule-text
-     [form/editable
-      result
-      {:on-submit (partial change-result repo-id rules idx)
-       :transformer transformations/keyword}
-      [:span.result
-       [components/keyword result]]]
-     " happens"
-     (if (empty? conditions)
-         " always."
-         [:ul.conditions
-          (for [[idx' [path match]] (map-indexed vector conditions)]
-              ^{:key (pr-str [result path match])}
-              [condition repo-id rules idx idx' path match])])
-     [button-row repo-id rules idx]])
+    (let [add-button [:i.fa.fa-plus-circle.button.blue
+                      {:on-click #(add-condition repo-id rules idx)}]]
+        [:li.rule-text
+         [form/editable
+          result
+          {:on-submit   (partial change-result repo-id rules idx)
+           :transformer transformations/keyword}
+          [:span.result
+           [components/keyword result]]]
+         " happens "
+         (when (seq conditions)
+             add-button)
+         (if (empty? conditions)
+             "always. "
+             [:ul.conditions
+              (for [[idx' [path match]] (map-indexed vector conditions)]
+                  ^{:key (pr-str [result path match])}
+                  [condition repo-id rules idx idx' path match])])
+         (when (empty? conditions)
+             add-button)
+         [button-row repo-id rules idx]]))
 
 (defn display [repo-id rules]
     [:div.rules
@@ -109,4 +121,5 @@
           [rule conditions repo-id rules idx result])]
      [:div.button-row
       [:button.pure-button.pure-button-primary
+       {:on-click #(add-rule repo-id rules)}
        [:i.fa.fa-plus-circle]]]])
