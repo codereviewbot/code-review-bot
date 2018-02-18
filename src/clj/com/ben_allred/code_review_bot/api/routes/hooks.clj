@@ -6,17 +6,40 @@
               [com.ben-allred.code-review-bot.api.services.integrations.github :as github]
               [com.ben-allred.code-review-bot.api.db.models.configs :as configs]
               [com.ben-allred.code-review-bot.api.services.integrations.config :as config]
-              [com.ben-allred.code-review-bot.api.services.integrations.core :as integrations]))
+              [com.ben-allred.code-review-bot.api.services.integrations.core :as integrations]
+              [clojure.core.async :as async]
+              [clojure.string :as string]))
+
+(defn ^:private fix-offset [date-string]
+    (let [pos (- (count date-string) 2)]
+        (str (subs date-string 0 pos) ":" (subs date-string pos))))
+
+(defn ^:private idiomatize [value]
+    (cond
+        (map? value) (->> value
+                         (map (fn [[k v]]
+                                  (let [k' (name k)]
+                                      [(keyword (str (string/replace k' #"_" "-") (when (boolean? v) "?")))
+                                       (if (string/ends-with? k' "_at")
+                                           (-> "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+                                               (clj-time.format/formatter)
+                                               (clj-time.format/unparse (clj-time.coerce/to-date-time v))
+                                               (fix-offset))
+                                           (idiomatize v))])))
+                         (into {}))
+        (coll? value) (map idiomatize value)
+        :else value))
 
 (defn ^:private handle-integration [payload]
-    (some->> payload
-        (integrations/process config/integrator)
-        (integrations/process github/integrator)
-        (integrations/process rules/integrator)
-        (integrations/process slack/integrator)))
+    (->> payload
+        (idiomatize)
+        (integrations/process config/look-up)
+        (integrations/process github/generate-payload)
+        (integrations/process rules/match-rule)
+        (integrations/process slack/post)))
 
 (def webhooks
     (POST "/git" req
-        (if (handle-integration (select-keys req [:body]))
-            {:status 204}
-            {:status 404 :body {:message "Integration not found"}})))
+        (async/thread
+            (handle-integration (select-keys req [:body])))
+        {:status 202}))

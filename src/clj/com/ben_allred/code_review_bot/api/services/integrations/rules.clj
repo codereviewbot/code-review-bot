@@ -7,19 +7,21 @@
             (re-find (re-pattern condition) value))))
 
 (defn ^:private message-key [rules payload]
-    (first (for [[result conditions] rules
-                 :when (every? (rule->fn payload) conditions)]
-               result)))
+    (->> rules
+        (filter (comp (partial every? (rule->fn payload)) second))
+        (ffirst)))
 
 (defn ^:private rand-message [messages key]
     (rand-nth (seq (get messages key))))
 
-(def integrator
+(def match-rule
     (reify integrations/IIntegrator
         (process [_ payload]
-            (let [{:keys [messages rules]} (:config payload)]
-                (some->> payload
-                    (:github)
-                    (message-key rules)
-                    (rand-message messages)
-                    (assoc-in payload [:rules :message]))))))
+            (let [{:keys [messages rules]} (:config payload)
+                  message
+                  (some->> payload
+                      (:github)
+                      (message-key rules)
+                      (rand-message messages))]
+                (cond-> payload
+                    message (assoc-in [:rules :message] message))))))

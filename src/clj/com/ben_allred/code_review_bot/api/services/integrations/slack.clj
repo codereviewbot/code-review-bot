@@ -15,11 +15,14 @@
     (let [{:keys [url message]} (:commit github)
           slack-message (wrap-message url message (:message rules))
           slack-path    (:slack-path config)]
-        (when (and slack-message slack-path)
+        (when (and (= :push (:event github)) slack-message slack-path)
             (http/post (str slack-url slack-path) {:body {:text slack-message}})
             payload)))
 
-(def integrator
+(def post
     (reify integrations/IIntegrator
         (process [_ payload]
-            (post-to-slack payload))))
+            (->> payload
+                (post-to-slack)
+                (boolean)
+                (assoc-in payload [:slack :posted?])))))
