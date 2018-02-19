@@ -16,14 +16,14 @@
             (mc/ensure-index db :users {:github-user 1} {:unique true})
             db)))
 
-(def find-many
-    (partial mc/find-maps @db))
+(defn find-many [coll query]
+    (mc/find-maps @db coll query))
 
-(def find-one
-    (partial mc/find-one-as-map @db))
+(defn find-one [coll query]
+    (mc/find-one-as-map @db coll query))
 
-(def insert
-    (partial mc/insert @db))
+(defn insert [coll document]
+    (mc/insert @db coll document))
 
 (defn update [coll query document]
     (mc/find-and-modify @db coll query document {:return-new true}))

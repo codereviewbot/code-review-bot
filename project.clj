@@ -73,7 +73,7 @@
                                          [figwheel-sidecar "0.5.14"]
                                          [com.cemerick/piggieback "0.2.2"]]
                          :main          com.ben-allred.code-review-bot.api.server/-dev
-                         :source-paths  ["src/clj" "src/cljs" "src/cljc"]
+                         :source-paths  ["src/clj" "src/cljs" "src/cljc" "dev"]
                          :plugins       [[cider/cider-nrepl "0.12.0"]]
                          :clean-targets ^{:protect false} ["resources/public/js"
                                                            "resources/public/css"
