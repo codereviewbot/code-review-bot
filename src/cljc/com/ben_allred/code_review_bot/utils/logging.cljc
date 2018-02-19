@@ -18,16 +18,23 @@
 (defmacro error [& args]
     `(logger/error ~@args))
 
-(defmacro spy* [expr f spacer]
-    `(let [result# ~expr]
-         (warn (quote ~expr) ~spacer (colors/colorize (~f result#)))
+(defmacro spy* [expr result f spacer]
+    `(let [result# ~result]
+         (warn ~expr ~spacer (colors/colorize (~f result#)))
          result#))
 
-(defmacro spy [expr]
-    `(spy* ~expr identity "\uD83D\uDC40 "))
-
 (defmacro spy-tap [f expr]
-    `(spy* ~expr ~f "\uD83C\uDF7A "))
+    `(spy* (quote ~expr) ~expr ~f "\uD83C\uDF7A "))
+
+(defmacro spy-on [f]
+    `(fn [& args#]
+         (spy* (cons (quote ~f) args#) (apply ~f args#) identity "\u27A1 ")))
+
+(defmacro spy [expr]
+    `(spy* (quote ~expr) ~expr identity "\uD83D\uDC40 "))
+
+(defmacro tap-spy [expr f]
+    `(spy* (quote ~expr) ~expr ~f "\uD83C\uDF7A "))
 
 (defn ^:private ns-color [ns-str]
     (colors/with-style ns-str {:color :blue :trim? true}))
