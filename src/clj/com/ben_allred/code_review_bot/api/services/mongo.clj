@@ -2,7 +2,7 @@
     (:refer-clojure :exclude [update])
     (:require [monger.core :as mg]
               [monger.collection :as mc]
-              [com.ben-allred.code-review-bot.api.utils.env :as env]
+              [com.ben-allred.code-review-bot.services.env :as env]
               [clojure.tools.reader :as reader]
               [com.ben-allred.code-review-bot.utils.maps :as maps]))
 

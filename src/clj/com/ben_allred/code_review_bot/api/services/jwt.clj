@@ -1,7 +1,7 @@
 (ns com.ben-allred.code-review-bot.api.services.jwt
     (:require [clj-jwt.core :as jwt]
               [clj-time.core :as time]
-              [com.ben-allred.code-review-bot.api.utils.env :as env]
+              [com.ben-allred.code-review-bot.services.env :as env]
               [com.ben-allred.code-review-bot.utils.json :as json])
     (:import [java.util Date]))
 

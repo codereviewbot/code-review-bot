@@ -10,8 +10,8 @@
               [com.ben-allred.code-review-bot.api.routes.hooks :as hooks]
               [com.ben-allred.code-review-bot.api.routes.configs :as configs]
               [com.ben-allred.code-review-bot.api.services.middleware :as middleware]
-              [com.ben-allred.code-review-bot.api.utils.env :as env]
               [ring.util.response :as response]
+              [com.ben-allred.code-review-bot.services.env :as env]
               [com.ben-allred.code-review-bot.utils.logging :as log]))
 
 (defroutes ^:private base
@@ -30,9 +30,14 @@
         (middleware/content-type)
         (site)))
 
+(def ^:private server-port
+    (if-let [port (:port env/env)]
+        (Integer/parseInt (str port))
+        3000))
+
 (defn ^:private run [app]
-    (run-server #'app {:port env/server-port})
-    (println "Server is listening on port" env/server-port))
+    (run-server #'app {:port server-port})
+    (println "Server is listening on port" server-port))
 
 (defn -main [& args]
     (run app))
@@ -40,5 +45,5 @@
 (defn -dev [& args]
     (println "Server is running with #'wrap-reload")
     (run (wrap-reload #'app))
-    (nrepl/start-server :port env/nrepl-port)
-    (println "REPL is listening on port" env/nrepl-port))
+    (nrepl/start-server :port 7000)
+    (println "REPL is listening on port" 7000))

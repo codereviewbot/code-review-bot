@@ -1,6 +1,6 @@
 (ns com.ben-allred.code-review-bot.api.services.auth
     (:require [ring.util.response :as resp]
-              [com.ben-allred.code-review-bot.api.utils.env :as env]
+              [com.ben-allred.code-review-bot.services.env :as env]
               [clojure.core.async :as async]
               [com.ben-allred.code-review-bot.services.http :as http]
               [com.ben-allred.code-review-bot.api.services.jwt :as jwt]

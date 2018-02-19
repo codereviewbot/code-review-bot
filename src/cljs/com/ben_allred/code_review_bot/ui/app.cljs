@@ -9,6 +9,7 @@
               [com.ben-allred.code-review-bot.ui.views.home :as home]
               [com.ben-allred.code-review-bot.ui.views.repo :as repo]
               [com.ben-allred.code-review-bot.ui.views.repos :as repos]
+              [com.ben-allred.code-review-bot.services.env :as env]
               [com.ben-allred.code-review-bot.utils.logging :as log :include-macros true]
               [reagent.core :as r]))
 
