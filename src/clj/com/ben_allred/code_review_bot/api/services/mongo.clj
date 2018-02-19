@@ -16,8 +16,6 @@
             (mc/ensure-index db :users {:github-user 1} {:unique true})
             db)))
 
-(def object-id monger.conversion/to-object-id)
-
 (def find-many
     (partial mc/find-maps @db))
 

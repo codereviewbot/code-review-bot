@@ -6,7 +6,10 @@
               [com.ben-allred.code-review-bot.api.services.jwt :as jwt]
               [clojure.string :as string]
               [com.ben-allred.code-review-bot.utils.uuids :as uuids]
-              [com.ben-allred.code-review-bot.utils.query-params :as qp]))
+              [com.ben-allred.code-review-bot.utils.query-params :as qp]
+              [clojure.set :as set]
+              [com.ben-allred.code-review-bot.utils.json :as json]
+              [com.ben-allred.code-review-bot.utils.logging :as log]))
 
 (def ^:private oauth-config
     {:client-id     (env/env :oauth-client-id)
@@ -43,14 +46,22 @@
                        "User-Agent"    (:user-agent oauth-config)}})
         (async/<!!)))
 
+(defn ^:private authenticate [user]
+    (-> (str (env/env :base-url) "/")
+        (resp/redirect)
+        (token->cookie user)))
+
 (defn login []
-    (->> {:client_id    (:client-id oauth-config)
-          :redirect_url (:redirect-url oauth-config)
-          :scope        (string/join " " (:scope oauth-config))
-          :state        (uuids/random)}
-        (qp/stringify)
-        (str (:code-url oauth-config) "?")
-        (resp/redirect)))
+    (let [auth-user (env/env :auth-user)]
+        (if-let [user (and auth-user (json/parse auth-user))]
+            (authenticate user)
+            (->> {:client_id    (:client-id oauth-config)
+                  :redirect_url (:redirect-url oauth-config)
+                  :scope        (string/join " " (:scope oauth-config))
+                  :state        (uuids/random)}
+                (qp/stringify)
+                (str (:code-url oauth-config) "?")
+                (resp/redirect)))))
 
 (defn logout []
     (-> (str (env/env :base-url) "/")
@@ -65,7 +76,5 @@
                    (when-successful)
                    (select-keys [:login :email :name]))]
         (if (seq user)
-            (-> (str (env/env :base-url) "/")
-                (resp/redirect)
-                (token->cookie user))
+            (authenticate user)
             {:status 403})))

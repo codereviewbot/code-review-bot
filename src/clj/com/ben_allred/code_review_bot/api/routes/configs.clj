@@ -8,13 +8,13 @@
 (defroutes configs
     (GET "/" req
         (if-let [configs (-> req
-                           (get-in [:user :email])
+                           (get-in [:user :login])
                            (db/configs-by-github-user))]
             {:status 200
              :body   {:data configs}}
             {:status 404}))
     (GET "/:config-id" {:keys [params] :as req}
-        (if-let [config (-> (get-in req [:user :email])
+        (if-let [config (-> (get-in req [:user :login])
                           (db/config-by-github-user (:config-id params)))]
             {:status 200
              :body   {:data config}}
@@ -22,7 +22,7 @@
     (PATCH "/:config-id" {:keys [params body] :as req}
         (let [config-id   (:config-id params)
               config  (configs/find-by-id config-id)
-              access? (-> (get-in req [:user :email])
+              access? (-> (get-in req [:user :login])
                           (users/find-by-github-user)
                           (:repos)
                           (set)
