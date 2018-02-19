@@ -9,7 +9,7 @@
         [(keyword key) (for [[path condition] conditions]
                            [(map keyword path) condition])]))
 
-(def ^:private response-keys #{:id :description :messages :rules :repo-url})
+(def ^:private response-keys #{:id :description :messages :rules :repo-url :slack-path})
 
 (def ^:private update-keys (disj response-keys :id :repo-url))
 
