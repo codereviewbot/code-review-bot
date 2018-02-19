@@ -13,6 +13,7 @@
     (delay
         (let [db (:db (mg/connect-via-uri (conn-str (:mongodb-uri env/env))))]
             (mc/ensure-index db :configs {:repo-url 1} {:unique true})
+            (mc/ensure-index db :users {:github-user 1} {:unique true})
             db)))
 
 (def object-id monger.conversion/to-object-id)

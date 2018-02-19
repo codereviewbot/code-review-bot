@@ -33,7 +33,8 @@
     (find-one {:_id (uuids/->uuid id)}))
 
 (defn find-by-repos [repo-urls]
-    (find-many {:repo-url {:$in repo-urls}}))
+    (when (seq repo-urls)
+        (find-many {:repo-url {:$in repo-urls}})))
 
 (defn update-by-id [id config]
     (->> (select-keys config update-keys)

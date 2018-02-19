@@ -49,8 +49,8 @@
                 [:success body status response]
                 [:error body status response]))))
 
-(defn get [url]
-    (request* :get url nil))
+(defn get [url & [request]]
+    (request* :get url request))
 
 (defn post [url request]
     (request* :post url request))

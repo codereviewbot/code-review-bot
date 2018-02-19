@@ -9,13 +9,13 @@
     (GET "/" req
         (if-let [configs (-> req
                            (get-in [:user :email])
-                           (db/find-configs-for-user-by-email))]
+                           (db/configs-by-github-user))]
             {:status 200
              :body   {:data configs}}
             {:status 404}))
     (GET "/:config-id" {:keys [params] :as req}
         (if-let [config (-> (get-in req [:user :email])
-                          (db/find-config-for-user-by-email (:config-id params)))]
+                          (db/config-by-github-user (:config-id params)))]
             {:status 200
              :body   {:data config}}
             {:status 404}))
@@ -23,7 +23,7 @@
         (let [config-id   (:config-id params)
               config  (configs/find-by-id config-id)
               access? (-> (get-in req [:user :email])
-                          (users/find-by-email)
+                          (users/find-by-github-user)
                           (:repos)
                           (set)
                           (contains? (:repo-url config)))]

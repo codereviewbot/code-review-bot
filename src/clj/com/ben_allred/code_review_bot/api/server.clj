@@ -6,7 +6,7 @@
               [ring.middleware.reload :refer [wrap-reload]]
               [ring.middleware.json :as mw.json]
               [clojure.tools.nrepl.server :as nrepl]
-              [com.ben-allred.code-review-bot.api.auth.core :as auth]
+              [com.ben-allred.code-review-bot.api.routes.auth :as auth]
               [com.ben-allred.code-review-bot.api.routes.hooks :as hooks]
               [com.ben-allred.code-review-bot.api.routes.configs :as configs]
               [com.ben-allred.code-review-bot.api.services.middleware :as middleware]

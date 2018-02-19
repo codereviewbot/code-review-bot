@@ -7,3 +7,7 @@
         v
         #?(:clj  (UUID/fromString v)
            :cljs (uuid v))))
+
+(defn random []
+    #?(:clj (UUID/randomUUID)
+       :cljs (throw (ex-info "Not implemented" {}))))

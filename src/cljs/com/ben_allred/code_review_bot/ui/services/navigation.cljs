@@ -2,23 +2,12 @@
     (:require [bidi.bidi :as bidi]
               [clojure.string :as string]
               [com.ben-allred.code-review-bot.utils.keywords :as keywords]
+              [com.ben-allred.code-review-bot.utils.query-params :as qp]
               [pushy.core :as pushy]
               [com.ben-allred.code-review-bot.ui.services.store.core :as store]))
 
 (defn ^:private namify [[k v]]
     [k (str (keywords/safe-name v))])
-
-(defn ^:private parse-qp [s]
-    (->> (string/split s #"&")
-        (map #(string/split % #"="))
-        (filter (comp seq first))
-        (reduce (fn [qp [k v]] (assoc qp (keyword k) (or v true))) {})))
-
-(defn ^:private join-qp [qp]
-    (->> qp
-        (map namify)
-        (map (partial string/join "="))
-        (string/join "&")))
 
 (def ^:private routes
     ["/"
@@ -31,7 +20,7 @@
       [true :not-found]]])
 
 (defn match-route [path]
-    (let [qp (parse-qp (second (string/split path #"\?")))]
+    (let [qp (qp/parse (second (string/split path #"\?")))]
         (cond->
             (bidi/match-route routes path)
             (seq qp) (assoc :query-params qp))))
@@ -39,7 +28,7 @@
 (defn path-for
     ([page] (path-for page nil))
     ([page {:keys [query-params] :as params}]
-                (let [qp (join-qp query-params)]
+                (let [qp (qp/stringify query-params)]
                     (cond-> (apply bidi/path-for routes page (mapcat namify params))
                         (seq qp) (str "?" qp)))))
 
