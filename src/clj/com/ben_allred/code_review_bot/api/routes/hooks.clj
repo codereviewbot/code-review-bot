@@ -10,8 +10,11 @@
               [clojure.core.async :as async]
               [clojure.string :as string]))
 
-(defn ^:private fix-offset [date-string]
-    (let [pos (- (count date-string) 2)]
+(defn ^:private format-dt [value]
+    (let [date-string (-> "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+                          (clj-time.format/formatter)
+                          (clj-time.format/unparse (clj-time.coerce/to-date-time value)))
+          pos (- (count date-string) 2)]
         (str (subs date-string 0 pos) ":" (subs date-string pos))))
 
 (defn ^:private idiomatize [value]
@@ -21,10 +24,7 @@
                                   (let [k' (name k)]
                                       [(keyword (str (string/replace k' #"_" "-") (when (boolean? v) "?")))
                                        (if (string/ends-with? k' "_at")
-                                           (-> "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-                                               (clj-time.format/formatter)
-                                               (clj-time.format/unparse (clj-time.coerce/to-date-time v))
-                                               (fix-offset))
+                                           (format-dt v)
                                            (idiomatize v))])))
                          (into {}))
         (coll? value) (map idiomatize value)
