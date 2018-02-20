@@ -19,6 +19,7 @@
                    [http-kit "2.1.18"]
                    [io.nervous/kvlt "0.1.4"]
                    [kibu/pushy "0.3.8"]
+                   [markdown-to-hiccup "0.2.6"]
                    [metosin/jsonista "0.1.1"]
                    [org.clojure/clojure "1.9.0"]
                    [org.clojure/clojurescript "1.9.946"]

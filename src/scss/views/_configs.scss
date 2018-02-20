@@ -1,0 +1,8 @@
+.config {
+    display: flex;
+    flex-wrap: wrap;
+    & > * {
+        flex: 1 1;
+        min-width: 550px;
+    }
+}

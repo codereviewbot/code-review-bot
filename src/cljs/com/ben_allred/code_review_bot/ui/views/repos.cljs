@@ -12,11 +12,18 @@
 (defn root [state]
     (store/dispatch actions/request-configs)
     (fn [{:keys [configs] :as state}]
-        [:div
-         [:h2 "Your Projects"]
-         (if (= :available (:status configs))
-             [:ul
-              (for [config (:data configs)]
-                  [:li {:key (:id config)}
-                   [repo config]])]
-             [components/spinner])]))
+        (let [available? (= :available (:status configs))]
+            [:div
+             [:h2 "Your Projects"]
+             (cond
+                 (and available? (seq (:data configs)))
+                 [:ul
+                  (for [config (:data configs)]
+                      [:li {:key (:id config)}
+                       [repo config]])]
+
+                 available?
+                 [:div "You have no repos configured"]
+
+                 :else
+                 [components/spinner])])))

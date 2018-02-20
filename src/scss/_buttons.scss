@@ -17,6 +17,9 @@
 
 .button {
     cursor: pointer;
+    &.fa-minus-circle.red {
+        margin-right: 10px;
+    }
 }
 
 .button-row {
