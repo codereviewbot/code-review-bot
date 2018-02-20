@@ -9,7 +9,7 @@
     :dependencies [[bidi "2.1.3"]
                    [clj-jwt "0.1.1"]
                    [clj-time "0.6.0"]
-                   [com.ben-allred/collaj "0.4.0"]
+                   [com.ben-allred/collaj "0.5.0"]
                    [com.cognitect/transit-clj "0.8.300"]
                    [com.cognitect/transit-cljs "0.8.243"]
                    [com.novemberain/monger "3.1.0" :exclusions [com.google.guava/guava]]

@@ -2,24 +2,49 @@
     (:require [com.ben-allred.collaj.reducers :as collaj.reducers]
               [com.ben-allred.code-review-bot.utils.maps :as maps]))
 
-(defn page
+(defn ^:private page
     ([] nil)
     ([state [type page]]
      (case type
          :router/navigate page
          state)))
 
-(defn config
+(defn ^:private messages
     ([] {:status :init :data nil})
     ([state [type config]]
      (case type
          :config/request (assoc state :status :pending)
-         :config/update (assoc state :status :pending)
+         :config.messages/update (assoc state :status :pending)
          :config/fail (assoc state :status :error)
-         :config/succeed {:status :available :data (:data config)}
+         :config.messages/fail (assoc state :status :error)
+         :config/succeed {:status :available :data (get-in config [:data :messages])}
+         :config.messages/succeed {:status :available :data (get-in config [:data :messages])}
          state)))
 
-(defn configs
+(defn ^:private rules
+    ([] {:status :init :data nil})
+    ([state [type config]]
+     (case type
+         :config/request (assoc state :status :pending)
+         :config.rules/update (assoc state :status :pending)
+         :config/fail (assoc state :status :error)
+         :config.rules/fail (assoc state :status :error)
+         :config/succeed {:status :available :data (get-in config [:data :rules])}
+         :config.rules/succeed {:status :available :data (get-in config [:data :rules])}
+         state)))
+
+(defn ^:private config*
+    ([] {:status :init :data nil})
+    ([state [type config]]
+     (case type
+         :config/request (assoc state :status :pending)
+         :config/fail (assoc state :status :error)
+         :config/succeed {:status :available :data (dissoc (:data config) :rules :messages)}
+         state)))
+
+(def ^:private config (collaj.reducers/assoc-in config* [:data :rules] rules [:data :messages] messages))
+
+(defn ^:private configs
     ([] {:status :init :data nil})
     ([state [type configs]]
      (case type
@@ -28,14 +53,14 @@
          :configs/succeed {:status :available :data (:data configs)}
          state)))
 
-(defn user
+(defn ^:private user
     ([] {:status :init :data nil})
     ([state [type user]]
-        (case type
-            :user/request (assoc state :status :pending)
-            :user/fail (assoc state :status :error)
-            :user/succeed {:status :available :data (:data user)}
-            state)))
+     (case type
+         :user/request (assoc state :status :pending)
+         :user/fail (assoc state :status :error)
+         :user/succeed {:status :available :data (:data user)}
+         state)))
 
 (def root
     (collaj.reducers/combine {:page page :config config :configs configs :user user}))

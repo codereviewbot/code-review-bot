@@ -29,10 +29,18 @@
             (http/get)
             (request* dispatch :config/succeed :config/fail))))
 
-(defn update-config [config-id config]
+(defn update-rules [config-id rules]
     (fn [[dispatch]]
-        (dispatch [:config/update])
+        (dispatch [:config.rules/update])
         (-> "/api/configs/"
             (str config-id)
-            (http/patch {:body {:data config}})
-            (request* dispatch :config/succeed :config/fail))))
+            (http/patch {:body {:data {:rules rules}}})
+            (request* dispatch :config.rules/succeed :config.rules/fail))))
+
+(defn update-messages [config-id messages]
+    (fn [[dispatch]]
+        (dispatch [:config.messages/update])
+        (-> "/api/configs/"
+            (str config-id)
+            (http/patch {:body {:data {:messages messages}}})
+            (request* dispatch :config.messages/succeed :config.messages/fail))))

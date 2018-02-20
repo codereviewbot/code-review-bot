@@ -9,8 +9,8 @@
               [com.ben-allred.code-review-bot.ui.services.transformations :as transformations]))
 
 (defn ^:private update-rules [repo-id rules]
-    (->> {:rules rules}
-        (actions/update-config repo-id)
+    (->> rules
+        (actions/update-rules repo-id)
         (store/dispatch)))
 
 (defn ^:private move [repo-id rules from to]
