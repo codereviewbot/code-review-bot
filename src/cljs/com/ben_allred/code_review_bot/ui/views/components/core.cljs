@@ -2,12 +2,13 @@
     (:refer-clojure :exclude [keyword vector list pr-str set hash-map])
     (:require [markdown-to-hiccup.core :as md]
               [com.ben-allred.code-review-bot.services.emoji :as emoji]
-              [goog.string :as gstring]))
+              [goog.string :as gstring]
+              [com.ben-allred.code-review-bot.utils.logging :as log]))
 
 (defn ^:private fix-string [s]
     (-> s
-        (emoji/replace-emojis)
-        (gstring/unescapeEntities)))
+        (gstring/unescapeEntities)
+        (emoji/replace-emojis)))
 
 (defn ^:private fix-hiccup [[tag attrs & children]]
     (cond-> [({:i :em :em :strong :p :span} tag tag)]

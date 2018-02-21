@@ -3,6 +3,10 @@
     flex-wrap: wrap;
     & > * {
         flex: 1 1;
-        min-width: 550px;
+        width: 50vw;
+    }
+    .input-form {
+        width: 90%;
+        resize: none;
     }
 }

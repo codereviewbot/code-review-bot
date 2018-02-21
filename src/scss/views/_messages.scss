@@ -8,6 +8,9 @@
             }
             .message-list {
                 padding-left: 30px;
+                .message-str {
+                    display: flex;
+                }
             }
         }
         .message-key  {

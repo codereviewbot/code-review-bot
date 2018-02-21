@@ -10,3 +10,16 @@
         color: $green;
     }
 }
+
+.markdown {
+    & > span {
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .emoji {
+        padding-right: 10px;
+    }
+    :not(em) > .segment {
+        padding-right: 5px;
+    }
+}

@@ -6,7 +6,7 @@
               [com.ben-allred.code-review-bot.utils.logging :as log]))
 
 (defn ^:private input* [{:keys [on-change] :as attrs}]
-    [:input
+    [:textarea.input-form
      (-> attrs
          (assoc :auto-focus true)
          (maps/update-maybe :on-change comp #(.-value (.-target %)))
@@ -47,7 +47,6 @@
                                                                (not= value next-value))
                                                          (on-submit next-value)))
                                                (partial transformations/to-model transformer)))
-                         (assoc-in [:style :min-width] (str (+ (* 8 (count transformed)) 50) "px"))
                          (dissoc :transformer))])
                 [:span.editable.button
                  {:on-click #(reset! editing? true)}
