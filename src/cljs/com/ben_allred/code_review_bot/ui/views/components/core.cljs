@@ -49,7 +49,9 @@
 
 (defn markdown [value]
     [:span.code.markdown
-     (-> value
-         (md/md->hiccup)
-         (get-in [3 2] [:span ""])
-         (fix-hiccup))])
+     (let [hiccup (-> value
+                      (md/md->hiccup)
+                      (get 3)
+                      (nnext)
+                      (or [:span ""]))]
+         (fix-hiccup (into [:span {}] hiccup)))])
