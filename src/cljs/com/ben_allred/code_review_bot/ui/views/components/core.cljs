@@ -12,7 +12,8 @@
 
 (defn ^:private fix-hiccup [[tag attrs & children]]
     (cond-> [({:i :em :em :strong :p :span} tag tag)]
-        (seq attrs) (conj attrs)
+        (seq attrs) (conj (assoc attrs :key (gensym)))
+        (empty? attrs) (conj {:key (gensym)})
         (seq children) (into (->> children
                                  (map #(if (vector? %)
                                            (fix-hiccup %)

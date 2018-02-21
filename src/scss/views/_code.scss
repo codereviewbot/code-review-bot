@@ -1,5 +1,9 @@
 .code {
-    font-family: Lucida Console, Monaco, Courier;
+    font-family: Monaco;
+    code:not(.editable):not(:hover) {
+        color: $dark-blue;
+        background-color: #eee;
+    }
     &.keyword {
         color: $magenta;
     }
@@ -12,6 +16,7 @@
 }
 
 .markdown {
+    font-family: sans-serif;
     & > span {
         display: flex;
         flex-wrap: wrap;
@@ -19,7 +24,7 @@
     .emoji {
         padding-right: 10px;
     }
-    :not(em) > .segment {
+    :not(em):not(strong) > .segment {
         padding-right: 5px;
     }
 }

@@ -10,6 +10,10 @@
                 padding-left: 30px;
                 .message-str {
                     display: flex;
+                    line-height: 1.4rem;
+                    .fa-minus-circle.button {
+                        padding-top: 3px;
+                    }
                 }
             }
         }

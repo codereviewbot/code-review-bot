@@ -1631,5 +1631,5 @@
     (->> (string/split s #"\s+")
         (map #(let [emoji (slack->utf %)]
                   (cond
-                      emoji [:span.emoji emoji]
-                      :else [:span.segment %])))))
+                      emoji [:span.emoji {:key (gensym)} emoji]
+                      :else [:span.segment {:key (gensym)} %])))))
