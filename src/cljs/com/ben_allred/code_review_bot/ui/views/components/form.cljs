@@ -3,14 +3,15 @@
               [com.ben-allred.code-review-bot.utils.maps :as maps]
               [com.ben-allred.code-review-bot.ui.services.events :as events]
               [com.ben-allred.code-review-bot.ui.services.transformations :as transformations]
-              [com.ben-allred.code-review-bot.utils.logging :as log]))
+              [com.ben-allred.code-review-bot.utils.logging :as log]
+              [clojure.string :as string]))
 
 (defn ^:private input* [{:keys [on-change] :as attrs}]
     [:textarea.input-form
      (-> attrs
          (assoc :auto-focus true)
          (maps/update-maybe :on-change comp #(.-value (.-target %)))
-         (maps/update-maybe :on-key-down comp events/code->key #(.-keyCode %)))])
+         (maps/update-maybe :on-key-down comp events/->key-code))])
 
 (defn input [initial-value attrs]
     (let [value (r/atom nil)]
@@ -46,6 +47,7 @@
                                                                next-value
                                                                (not= value next-value))
                                                          (on-submit next-value)))
+                                               (fn [s] (string/replace s #"\\n" "\n"))
                                                (partial transformations/to-model transformer)))
                          (dissoc :transformer))])
                 [:span.editable.button
