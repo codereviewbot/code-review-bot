@@ -1,7 +1,8 @@
 (ns com.ben-allred.code-review-bot.ui.services.transformations
     (:refer-clojure :exclude [keyword vector])
     (:require [cljs.reader :as edn]
-              [com.ben-allred.code-review-bot.utils.logging :as log]))
+              [com.ben-allred.code-review-bot.utils.logging :as log]
+              [clojure.string :as string]))
 
 (defprotocol ITransform
     (to-view [this value])
@@ -39,3 +40,14 @@
                          (mapv (partial to-model transformer) result)))
                 (catch js/Object e
                     nil)))))
+
+(def markdown
+    (reify ITransform
+        (to-view [_ value]
+            (-> value
+                (string/replace #"\n" "\\n")
+                (string/replace #"^>[\s]+" ">")))
+        (to-model [_ value]
+            (-> value
+                (string/replace #"\\n" "\n")
+                (string/replace #"^>([^\s])" "> $1")))))

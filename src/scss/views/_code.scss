@@ -17,7 +17,7 @@
 
 .markdown {
     font-family: sans-serif;
-    & > span {
+    span:not(.segment) {
         display: flex;
         flex-wrap: wrap;
     }
@@ -26,5 +26,11 @@
     }
     :not(em):not(strong) > .segment {
         padding-right: 5px;
+    }
+    blockquote {
+        padding: 0 10px;
+        border-left: 4px solid $gray;
+        border-right: 4px solid $gray;
+        border-radius: 10px;
     }
 }

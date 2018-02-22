@@ -55,7 +55,8 @@
       {:on-click #(delete-message repo-id messages message-key message)}]
      [form/editable
       message
-      {:on-submit #(edit-message repo-id messages message-key message %)}
+      {:on-submit #(edit-message repo-id messages message-key message %)
+       :transformer transformations/markdown}
       [:span.message
        [components/markdown message]]]])
 

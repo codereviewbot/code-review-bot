@@ -47,7 +47,6 @@
                                                                next-value
                                                                (not= value next-value))
                                                          (on-submit next-value)))
-                                               (fn [s] (string/replace s #"\\n" "\n"))
                                                (partial transformations/to-model transformer)))
                          (dissoc :transformer))])
                 [:span.editable.button

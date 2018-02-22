@@ -1,10 +1,11 @@
 (ns com.ben-allred.code-review-bot.api.services.integrations.rules
-    (:require [com.ben-allred.code-review-bot.api.services.integrations.core :as integrations]))
+    (:require [com.ben-allred.code-review-bot.api.services.integrations.core :as integrations]
+              [com.ben-allred.code-review-bot.utils.logging :as log]))
 
 (defn ^:private rule->fn [payload]
     (fn [[path condition]]
         (when-let [value (get-in payload path)]
-            (re-find (re-pattern condition) value))))
+            (re-find (re-pattern condition) (str value)))))
 
 (defn ^:private message-key [rules payload]
     (->> rules
@@ -18,10 +19,9 @@
     (reify integrations/IIntegrator
         (process [_ payload]
             (let [{:keys [messages rules]} (:config payload)
-                  message
-                  (some->> payload
-                      (:github)
-                      (message-key rules)
-                      (rand-message messages))]
+                  message (some->> payload
+                              (:github)
+                              (message-key rules)
+                              (rand-message messages))]
                 (cond-> payload
                     message (assoc-in [:rules :message] message))))))
