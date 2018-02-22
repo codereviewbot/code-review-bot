@@ -23,7 +23,7 @@
     {:event        :pull-request
      :status       (:state pull-request)
      :pull-request (-> pull-request
-                       (select-keys [:merged? :merged-at :state :title :merged-by])
+                       (select-keys [:merged? :merged-at :state :title :merged-by :user])
                        (assoc :diff (second (async/<!! (http/get (:diff-url pull-request))))))})
 
 (defn ^:private push-payload [{:keys [ref head-commit]}]
@@ -43,4 +43,10 @@
                 (:body)
                 (body->payload)
                 (merge (common (:body payload)))
-                (assoc payload :github)))))
+                (assoc payload :github)
+                (log/spy-tap :github)))))
+
+(def post-comment
+    (reify integrations/IIntegrator
+        (process [_ payload]
+            (log/spy-tap :rules payload))))
