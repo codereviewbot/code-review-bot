@@ -11,7 +11,7 @@
 
 (defonce ^:private db
     (delay
-        (let [db (:db (mg/connect-via-uri (conn-str (:mongodb-uri env/env))))]
+        (let [db (:db (mg/connect-via-uri (conn-str (env/get :mongodb-uri))))]
             (mc/ensure-index db :configs {:repo-url 1} {:unique true})
             (mc/ensure-index db :users {:github-user 1} {:unique true})
             db)))

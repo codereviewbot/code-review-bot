@@ -5,10 +5,11 @@
               [com.ben-allred.code-review-bot.utils.json :as json])
     (:import [java.util Date]))
 
+(def ^:private jwt-secret (env/get :jwt-secret))
+
 (defn valid? [token]
     (try
-        (jwt/verify (jwt/str->jwt token)
-            (env/env :jwt-secret))
+        (jwt/verify (jwt/str->jwt token) jwt-secret)
         (catch Throwable e
             false)))
 
@@ -23,5 +24,5 @@
          (-> {:data payload :iat now}
              (assoc :exp (time/plus now (time/days days-to-expire)))
              (jwt/jwt)
-             (jwt/sign :HS256 (env/env :jwt-secret))
+             (jwt/sign :HS256 jwt-secret)
              (jwt/to-str)))))

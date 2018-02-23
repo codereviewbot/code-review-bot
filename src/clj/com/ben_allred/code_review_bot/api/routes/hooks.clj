@@ -36,7 +36,8 @@
         (integrations/process config/look-up)
         (integrations/process github/generate-payload)
         (integrations/process rules/match-rule)
-        (integrations/process slack/post)))
+        (integrations/process slack/post)
+        (integrations/process github/post-comment)))
 
 (def webhooks
     (POST "/git" req

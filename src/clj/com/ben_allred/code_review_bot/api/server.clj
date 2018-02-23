@@ -31,7 +31,7 @@
         (site)))
 
 (def ^:private server-port
-    (if-let [port (:port env/env)]
+    (if-let [port (env/get :port)]
         (Integer/parseInt (str port))
         3000))
 
