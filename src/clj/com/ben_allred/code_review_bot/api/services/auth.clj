@@ -9,17 +9,18 @@
               [com.ben-allred.code-review-bot.utils.query-params :as qp]
               [clojure.set :as set]
               [com.ben-allred.code-review-bot.utils.json :as json]
-              [com.ben-allred.code-review-bot.utils.logging :as log]))
+              [com.ben-allred.code-review-bot.utils.logging :as log]
+              [com.ben-allred.code-review-bot.api.services.integrations.github :as github]))
 
 (def ^:private oauth-config
-    {:client-id     (env/env :oauth-client-id)
-     :client-secret (env/env :oauth-client-secret)
+    {:client-id     (env/get :oauth-client-id)
+     :client-secret (env/get :oauth-client-secret)
      :code-url      "https://github.com/login/oauth/authorize"
      :token-url     "https://github.com/login/oauth/access_token"
      :user-url      "https://api.github.com/user"
-     :redirect-url  (str (env/env :base-url) "/auth/callback")
+     :redirect-url  (str (env/get :base-url) "/auth/callback")
      :scope         ["user" "repo"]
-     :user-agent    "CodeReviewBot/1.0"})
+     :user-agent    (env/get :user-agent)})
 
 (defn ^:private token->cookie [resp value]
     (->> value
@@ -47,12 +48,12 @@
         (async/<!!)))
 
 (defn ^:private authenticate [user]
-    (-> (str (env/env :base-url) "/")
+    (-> (str (env/get :base-url) "/")
         (resp/redirect)
         (token->cookie user)))
 
 (defn login []
-    (let [auth-user (env/env :auth-user)]
+    (let [auth-user (env/get :auth-user)]
         (if-let [user (and auth-user (json/parse auth-user))]
             (authenticate user)
             (->> {:client_id    (:client-id oauth-config)
@@ -64,7 +65,7 @@
                 (resp/redirect)))))
 
 (defn logout []
-    (-> (str (env/env :base-url) "/")
+    (-> (str (env/get :base-url) "/")
         (resp/redirect)
         (assoc :cookies {"auth-token" {:value "" :path "/" :http-only true :max-age 0}})))
 

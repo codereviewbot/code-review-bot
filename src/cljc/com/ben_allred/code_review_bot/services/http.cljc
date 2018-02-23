@@ -17,6 +17,7 @@
      204 :no-content
      400 :bad-request
      401 :unauthorized
+     403 :forbidden
      404 :not-found
      409 :conflict
      424 :failed-dependency
@@ -37,17 +38,20 @@
 
 (defn ^:private request* [method url request]
     (async/go
-        (let [{:keys [status] :as response} (async/<! (-> request
-                                                          (assoc :method method :url url)
-                                                          (content/prepare content-type)
-                                                          (kvlt/request!)))
-              body   (-> response
-                         (content/parse (content-type-header response))
-                         (:body))
-              status (status->kw status status)]
+        (let [ch-response (async/<! (-> request
+                                        (assoc :method method :url url)
+                                        (content/prepare content-type)
+                                        (kvlt/request!)))
+              {:keys [status] :as response} (if-let [data (ex-data ch-response)]
+                                                data
+                                                ch-response)
+              body        (-> response
+                              (content/parse (content-type-header response))
+                              (:body))
+              status      (status->kw status status)]
             (if (success? response)
-                [:success body status response]
-                [:error body status response]))))
+                [:success body status ch-response]
+                [:error body status ch-response]))))
 
 (defn get [url & [request]]
     (request* :get url request))
