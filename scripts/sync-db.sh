@@ -15,7 +15,7 @@ done
 
 echo 'running mongo script...'
 echo "
-var remote = connect('${HEROKU_MONGODB_URI}');
+var remote = connect('${REMOTE_MONGODB_URI}');
 var local = connect('${MONGODB_URI}');
 
 ['configs', 'users'].forEach(function(coll) {
