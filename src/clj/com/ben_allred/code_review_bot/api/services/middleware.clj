@@ -3,7 +3,8 @@
               [clojure.string :as string]
               [com.ben-allred.code-review-bot.api.services.jwt :as jwt]
               [com.ben-allred.code-review-bot.services.content :as content]
-              [com.ben-allred.code-review-bot.utils.maps :as maps]))
+              [com.ben-allred.code-review-bot.utils.maps :as maps]
+              [com.ben-allred.code-review-bot.api.db.models.users :as users]))
 
 (defn log-response [handler]
     (fn [request]
@@ -16,11 +17,17 @@
                               uri)))
             response)))
 
-(defn decode-jwt [handler]
+(defn with-auth-user [handler]
     (fn [request]
-        (-> request
-            (assoc :user (:data (jwt/decode (get-in request [:cookies "auth-token" :value]))))
-            (handler))))
+        (let [user (-> request
+                       (get-in [:cookies "auth-token" :value])
+                       (jwt/decode)
+                       (:data))
+              login (:login user)]
+            (cond-> request
+                user (assoc :user user)
+                login (update :user merge (users/find-by-github-user login))
+                :always (handler)))))
 
 (defn content-type [handler]
     (fn [request]

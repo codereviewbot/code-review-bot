@@ -2,7 +2,13 @@
     (:require [com.ben-allred.code-review-bot.api.services.mongo :as mongo]
               [clojure.set :as set]))
 
+(defn ^:private transform [user]
+    (-> user
+        (set/rename-keys {:_id :id})
+        (update :repos set)))
+
 (defn find-by-github-user [github-user]
-    (-> :users
-        (mongo/find-one {:github-user github-user})
-        (set/rename-keys {:_id :id})))
+    (->> github-user
+        (assoc {} :github-user)
+        (mongo/find-one :users)
+        (transform)))

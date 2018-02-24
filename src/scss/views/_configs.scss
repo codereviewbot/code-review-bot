@@ -1,8 +1,30 @@
 .config {
     display: grid;
     grid-template: 1fr / 50% 50%;
-    .input-form {
+    .input {
         width: 90%;
         resize: none;
+    }
+}
+
+.repo-form {
+    width: 600px;
+    min-height: 265px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    .field {
+        .label {
+            margin-bottom: 5px;
+        }
+        display: flex;
+        flex-direction: column;
+        &.description .input {
+            height: 100px;
+            resize: none;
+        }
+    }
+    & > *:not(:first-child) {
+        margin-top: 15px;
     }
 }

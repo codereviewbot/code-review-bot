@@ -12,24 +12,23 @@
 (defroutes configs
     (GET "/" req
         (if-let [configs (-> req
-                             (get-in [:user :login])
-                             (db/configs-by-github-user))]
+                             (:user)
+                             (db/configs-by-user))]
             (response/respond [:ok {:data (map sans configs)}])
             (response/respond [:not-found])))
     (GET "/:config-id" {:keys [params] :as req}
-        (if-let [config (-> (get-in req [:user :login])
-                            (db/config-by-github-user (:config-id params)))]
+        (if-let [config (-> req
+                            (:user)
+                            (db/config-by-user (:config-id params)))]
             (response/respond [:ok {:data (sans config)}])
             (response/respond [:not-found])))
     (PATCH "/:config-id" {:keys [params body] :as req}
         (let [config-id (:config-id params)
               config    (configs/find-by-id config-id)
-              access?   (-> (get-in req [:user :login])
-                            (users/find-by-github-user)
+              access?   (-> req
+                            (:user)
                             (:repos)
-                            (set)
                             (contains? (:repo-url config)))]
-            ;(Thread/sleep 1500)
             (cond
                 access? (response/respond [:ok {:data (sans (configs/update-by-id config-id (:data body)))}])
                 (nil? config) (response/respond [:not-found])

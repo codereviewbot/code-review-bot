@@ -26,7 +26,7 @@
 (def ^:private app
     (-> #'base
         (middleware/log-response)
-        (middleware/decode-jwt)
+        (middleware/with-auth-user)
         (middleware/content-type)
         (site)))
 

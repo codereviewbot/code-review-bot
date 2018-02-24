@@ -46,6 +46,14 @@
             (http/patch {:body {:data {:messages messages}}})
             (request* dispatch :config.messages/succeed :config.messages/fail))))
 
+(defn update-description [config-id description]
+    (fn [[dispatch]]
+        (dispatch [:configs.config/update])
+        (-> "/api/configs/"
+            (str config-id)
+            (http/patch {:body {:data {:description description}}})
+            (request* dispatch :configs.config/succeed :configs.config/fail))))
+
 (defn show-modal [content & [title]]
     (fn [[dispatch]]
         (dispatch [:modal/mount content title])

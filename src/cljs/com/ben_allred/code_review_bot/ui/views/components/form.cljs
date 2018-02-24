@@ -4,32 +4,38 @@
               [com.ben-allred.code-review-bot.ui.services.events :as events]
               [com.ben-allred.code-review-bot.ui.services.transformations :as transformations]
               [com.ben-allred.code-review-bot.utils.logging :as log]
-              [clojure.string :as string]))
+              [clojure.string :as string]
+              [com.ben-allred.code-review-bot.ui.utils.core :as utils]))
 
-(defn ^:private input* [{:keys [on-change] :as attrs}]
-    [:textarea.input-form
+(defn ^:private input* [tag {:keys [on-change] :as attrs}]
+    [tag
      (-> attrs
-         (assoc :auto-focus true)
+         (utils/classes {:input true})
+         (update :auto-focus #(if (nil? %) true %))
          (maps/update-maybe :on-change comp #(.-value (.-target %)))
          (maps/update-maybe :on-key-down comp events/->key-code))])
 
-(defn ^:private input [initial-value attrs]
-    (let [value (r/atom nil)]
-        (r/create-class
-            {:component-did-mount
-             (fn [] (reset! value initial-value))
-             :reagent-render
-             (fn [initial-value {:keys [on-submit on-cancel]}]
-                 [input* (cond-> attrs
-                             :always (assoc :type :text
-                                            :value @value
-                                            :on-change #(reset! value %)
-                                            :on-key-down #(case %
-                                                              :esc (and on-cancel (on-cancel))
-                                                              :enter (and on-submit (on-submit @value))
-                                                              nil))
-                             on-submit (assoc :on-blur #(on-submit @value))
-                             :always (dissoc :on-submit :on-cancel))])})))
+(defn input
+    ([initial-value attrs]
+     [input :input initial-value attrs])
+    ([tag initial-value attrs]
+     (let [value (r/atom nil)]
+         (r/create-class
+             {:component-did-mount
+              (fn [] (reset! value initial-value))
+              :reagent-render
+              (fn [tag initial-value {:keys [on-submit on-cancel on-change]}]
+                  [input* tag (cond-> attrs
+                                  :always (assoc :type :text
+                                                 :value @value
+                                                 :on-key-down #(case %
+                                                                   :esc (and on-cancel (on-cancel))
+                                                                   :enter (and on-submit (on-submit @value))
+                                                                   nil))
+                                  on-change (update :on-change juxt #(reset! value %))
+                                  (not on-change) (assoc :on-change #(reset! value %))
+                                  on-submit (assoc :on-blur #(on-submit @value))
+                                  :always (dissoc :on-submit :on-cancel))])}))))
 
 (defn editable [value attrs component]
     (let [editing?      (r/atom false)
@@ -38,6 +44,7 @@
             (if @editing?
                 (let [transformed (transformations/to-view transformer value)]
                     [input
+                     :textarea
                      transformed
                      (-> attrs
                          (assoc :on-cancel stop-editing!

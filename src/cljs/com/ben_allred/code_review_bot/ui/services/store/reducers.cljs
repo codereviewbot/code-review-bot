@@ -47,11 +47,15 @@
 (defn ^:private configs
     ([] {:status :init :data nil})
     ([state [type configs]]
-     (case type
-         :configs/request (assoc state :status :pending)
-         :configs/fail (assoc state :status :error)
-         :configs/succeed {:status :available :data (:data configs)}
-         state)))
+     (let [data (:data configs)]
+         (case type
+             :configs/request (assoc state :status :pending)
+             :configs/fail (assoc state :status :error)
+             :configs/succeed {:status :available :data data}
+             :configs.config/update (assoc state :status :pending)
+             :configs.config/succeed {:status :available
+                                      :data   (map #(if (= (:id %) (:id data)) data %) (:data state))}
+             state))))
 
 (defn ^:private user
     ([] {:status :init :data nil})

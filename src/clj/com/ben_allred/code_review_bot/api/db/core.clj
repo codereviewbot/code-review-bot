@@ -2,19 +2,15 @@
     (:require [com.ben-allred.code-review-bot.api.db.models.users :as users]
               [com.ben-allred.code-review-bot.api.db.models.configs :as configs]))
 
-(defn ^:private find-user-configs [github-user]
-    (some->> github-user
-        (users/find-by-github-user)
+(defn config-by-user [user repo-id]
+    (some->> user
         (:repos)
-        (configs/find-by-repos)))
-
-(defn config-by-github-user [github-user repo-id]
-    (some->> github-user
-        (find-user-configs)
+        (configs/find-by-repos)
         (filter (comp (partial = repo-id) str :id))
         (first)))
 
-(defn configs-by-github-user [github-user]
-    (some->> github-user
-        (find-user-configs)
-        (map #(select-keys % [:id :description]))))
+(defn configs-by-user [user]
+    (some->> user
+        (:repos)
+        (configs/find-by-repos)
+        (map #(select-keys % [:id :description :repo-url]))))
