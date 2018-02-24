@@ -26,6 +26,9 @@
      503 :service-unavailable
      504 :gateway-timeout})
 
+(def kw->status
+    (into {} (map (comp vec reverse)) status->kw))
+
 (def ^:private success?
     (comp #{200 201 202 204} :status))
 

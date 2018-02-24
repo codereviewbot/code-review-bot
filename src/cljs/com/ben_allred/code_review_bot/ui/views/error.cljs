@@ -11,6 +11,7 @@
 
 (defn not-found [state]
     [:div
-     [:h2 "not-found"]
+     [:h2 "Page not found"]
      [:div
-      [nav/link {:page :home} "go home"]]])
+      "Try going "
+      [nav/link {:page :home} "home"]]])

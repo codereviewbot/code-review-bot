@@ -8,7 +8,8 @@
               [com.ben-allred.code-review-bot.api.services.integrations.config :as config]
               [com.ben-allred.code-review-bot.api.services.integrations.core :as integrations]
               [clojure.core.async :as async]
-              [clojure.string :as string]))
+              [clojure.string :as string]
+              [com.ben-allred.code-review-bot.api.utils.response :as response]))
 
 (defn ^:private format-dt [value]
     (let [date-string (-> "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
@@ -43,4 +44,4 @@
     (POST "/git" req
         (async/thread
             (handle-integration (select-keys req [:body])))
-        {:status 202}))
+        (response/respond [:accepted])))

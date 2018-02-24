@@ -13,7 +13,7 @@
          (maps/update-maybe :on-change comp #(.-value (.-target %)))
          (maps/update-maybe :on-key-down comp events/->key-code))])
 
-(defn input [initial-value attrs]
+(defn ^:private input [initial-value attrs]
     (let [value (r/atom nil)]
         (r/create-class
             {:component-did-mount

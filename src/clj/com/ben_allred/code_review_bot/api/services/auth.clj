@@ -10,7 +10,8 @@
               [clojure.set :as set]
               [com.ben-allred.code-review-bot.utils.json :as json]
               [com.ben-allred.code-review-bot.utils.logging :as log]
-              [com.ben-allred.code-review-bot.api.services.integrations.github :as github]))
+              [com.ben-allred.code-review-bot.api.services.integrations.github :as github]
+              [com.ben-allred.code-review-bot.api.utils.response :as response]))
 
 (def ^:private oauth-config
     {:client-id     (env/get :oauth-client-id)
@@ -78,4 +79,4 @@
                    (select-keys [:login :email :name]))]
         (if (seq user)
             (authenticate user)
-            {:status 403})))
+            (response/respond [:forbidden]))))
