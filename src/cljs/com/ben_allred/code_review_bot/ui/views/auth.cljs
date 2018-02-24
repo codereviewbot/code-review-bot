@@ -5,7 +5,7 @@
     [:div
      [:h2 "login"]
      [:div
-      [nav/link {:page :home} "go home"]]])
+      [:a {:href (nav/path-for :home)} "go home"]]])
 
 (defn logout-button []
     [:button.pure-button.pure-button-primary

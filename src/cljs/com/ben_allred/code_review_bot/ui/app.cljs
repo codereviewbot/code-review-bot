@@ -33,9 +33,14 @@
                  :pending [components/spinner]
                  :error [error/not-logged-in]
                  [:div
-                  [:header
-                   [:h1 "Code Review Bot"]
-                   [auth/logout-button]]
+                  [:header.header
+                   [:div.button
+                    [:img.logo {:src "/images/logo.jpg"}]
+                    [:h1
+                     {:on-click #(nav/navigate! :home)}
+                     "Code Review Bot"]]
+                   [:div
+                    [auth/logout-button]]]
                   [:main.main
                    [component state]]])])))
 

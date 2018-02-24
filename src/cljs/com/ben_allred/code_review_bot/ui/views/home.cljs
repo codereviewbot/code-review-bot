@@ -5,4 +5,4 @@
     [:div
      [:h2 "home"]
      [:div
-      [nav/link {:page :repos} "/repos"]]])
+      [:a {:href (nav/path-for :repos)} "/repos"]]])

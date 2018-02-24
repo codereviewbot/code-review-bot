@@ -49,6 +49,3 @@
     ([page] (nav-and-replace! page nil))
     ([page params]
         (pushy/replace-token! history (path-for page params))))
-
-(defn link [{:keys [page params]} & children]
-    (into [:a {:href "#" :on-click (fn [_] (navigate! page params))}] children))

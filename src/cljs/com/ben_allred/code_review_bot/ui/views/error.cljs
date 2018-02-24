@@ -14,4 +14,4 @@
      [:h2 "Page not found"]
      [:div
       "Try going "
-      [nav/link {:page :home} "home"]]])
+      [:a {:href (nav/path-for :home)} "home"]]])
