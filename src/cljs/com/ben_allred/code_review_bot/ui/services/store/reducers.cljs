@@ -62,5 +62,15 @@
          :user/succeed {:status :available :data (:data user)}
          state)))
 
+(defn ^:private modal
+    ([] {:state :unmounted})
+    ([state [type content title]]
+     (case type
+         :modal/mount {:state :mounted :content content :title title}
+         :modal/show (assoc state :state :shown)
+         :modal/hide (assoc state :state :modal-hidden)
+         :modal/unmount {:state :unmounted}
+         state)))
+
 (def root
-    (collaj.reducers/combine {:page page :config config :configs configs :user user}))
+    (collaj.reducers/combine {:page page :config config :configs configs :user user :modal modal}))

@@ -11,6 +11,7 @@
               [com.ben-allred.code-review-bot.ui.views.repos :as repos]
               [com.ben-allred.code-review-bot.services.env :as env]
               [com.ben-allred.code-review-bot.utils.logging :as log :include-macros true]
+              [com.ben-allred.code-review-bot.ui.views.components.modal :as modal]
               [reagent.core :as r]
               [com.ben-allred.code-review-bot.ui.views.main :as main]))
 
@@ -30,6 +31,7 @@
         (let [{:keys [user] :as state} (store/get-state)
               component (components (get-in state [:page :handler]) error/not-found)]
             [:div.app
+             [modal/modal state]
              (case (:status user)
                  :pending [components/spinner]
                  :error [error/not-logged-in]

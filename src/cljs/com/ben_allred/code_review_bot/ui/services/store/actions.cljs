@@ -1,6 +1,7 @@
 (ns com.ben-allred.code-review-bot.ui.services.store.actions
     (:require [com.ben-allred.code-review-bot.services.http :as http]
-              [cljs.core.async :as async]))
+              [cljs.core.async :as async]
+              [com.ben-allred.code-review-bot.ui.utils.macros :as macros :include-macros true]))
 
 (defn ^:private request* [request dispatch success-type error-type]
     (async/go
@@ -44,3 +45,13 @@
             (str config-id)
             (http/patch {:body {:data {:messages messages}}})
             (request* dispatch :config.messages/succeed :config.messages/fail))))
+
+(defn show-modal [content & [title]]
+    (fn [[dispatch]]
+        (dispatch [:modal/mount content title])
+        (macros/after 1 (dispatch [:modal/show]))))
+
+(defn hide-modal []
+    (fn [[dispatch]]
+        (dispatch [:modal/hide])
+        (macros/after 600 (dispatch [:modal/unmount]))))
