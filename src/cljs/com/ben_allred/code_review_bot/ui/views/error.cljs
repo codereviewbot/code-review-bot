@@ -1,16 +1,19 @@
 (ns com.ben-allred.code-review-bot.ui.views.error
-    (:require [com.ben-allred.code-review-bot.ui.services.navigation :as nav]))
+    (:require [com.ben-allred.code-review-bot.ui.services.navigation :as nav]
+              [com.ben-allred.code-review-bot.ui.views.main :as main]))
 
 (defn not-logged-in []
-    [:div "Try "
-     [:a
-      {:href     "/auth/login"
-       :on-click (fn [] (nav/reload!))}
-      "logging in"]
-     ", douchenozzle"])
+    [:div
+     [main/header]
+     [:div
+      [:button.pure-button.pure-button-primary.button
+       {:on-click #(nav/go-to! "/auth/login")}
+       [:i.fa.fa-github]
+       " login"]]])
 
 (defn not-found [state]
     [:div
+     [main/header (= :available (get-in state [:user :status]))]
      [:h2 "Page not found"]
      [:div
       "Try going "

@@ -11,7 +11,8 @@
               [com.ben-allred.code-review-bot.ui.views.repos :as repos]
               [com.ben-allred.code-review-bot.services.env :as env]
               [com.ben-allred.code-review-bot.utils.logging :as log :include-macros true]
-              [reagent.core :as r]))
+              [reagent.core :as r]
+              [com.ben-allred.code-review-bot.ui.views.main :as main]))
 
 (enable-console-print!)
 
@@ -33,14 +34,7 @@
                  :pending [components/spinner]
                  :error [error/not-logged-in]
                  [:div
-                  [:header.header
-                   [:div.button
-                    [:img.logo {:src "/images/logo.jpg"}]
-                    [:h1
-                     {:on-click #(nav/navigate! :home)}
-                     "Code Review Bot"]]
-                   [:div
-                    [auth/logout-button]]]
+                  [main/header true]
                   [:main.main
                    [component state]]])])))
 

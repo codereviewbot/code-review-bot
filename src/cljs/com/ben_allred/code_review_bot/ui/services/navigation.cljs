@@ -45,6 +45,9 @@
     ([page params]
         (pushy/set-token! history (path-for page params))))
 
+(defn go-to! [path]
+    (set! (.-pathname (.-location js/window)) path))
+
 (defn nav-and-replace!
     ([page] (nav-and-replace! page nil))
     ([page params]

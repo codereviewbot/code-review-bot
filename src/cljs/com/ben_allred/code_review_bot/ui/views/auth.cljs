@@ -9,7 +9,5 @@
 
 (defn logout-button []
     [:button.pure-button.pure-button-primary
-     {:on-click (fn []
-                    (.pushState (.-history js/window) nil nil "/auth/logout")
-                    (nav/reload!))}
+     {:on-click #(nav/go-to! "/auth/logout")}
      "logout"])

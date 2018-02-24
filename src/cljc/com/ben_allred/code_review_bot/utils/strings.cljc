@@ -2,10 +2,9 @@
     (:require [clojure.string :as string]))
 
 (defn trim-to-nil [s]
-    (let [s (string/trim s)]
-        (if-not (empty? s)
-            s
-            nil)))
+    (when-let [s (and s (string/trim s))]
+        (when-not (empty? s)
+            s)))
 
 (defn maybe-pr-str [s]
     (cond-> s
