@@ -21,7 +21,7 @@ in `.lein-env` as a map. See [environ.core](https://github.com/weavejester/envir
 - `MONGODB_URI` a connection string for a mongo database (i.e. `mongodb://localhost:27017/local_db`).
 - `BASE_URL` the base url for the app running locally (i.e. `http://localhost:3000`).
 - `JWT_SECRET` an encryption key for encoding/decoding jwt's. This is any random string.
-- `USER_AGENT` this is required for github's API. As far as I can tell, it's value doesn't matter as long as it exists.
+- `USER_AGENT` this is required for Github's API. As far as I can tell, it's value doesn't matter as long as it exists.
 
 Set this to by-pass github OAuth:
 
@@ -29,8 +29,8 @@ Set this to by-pass github OAuth:
 
 Set this for using github OAuth:
 
-- `OAUTH_CLIENT_ID` you must get this from [github's developer console](https://github.com/settings/developers).
-- `OAUTH_CLIENT_SET` you must get this from [github's developer console](https://github.com/settings/developers).
+- `OAUTH_CLIENT_ID` you must get this from [Github's developer console](https://github.com/settings/developers).
+- `OAUTH_CLIENT_SET` you must get this from [Github's developer console](https://github.com/settings/developers).
 
 ### Deploy
 
