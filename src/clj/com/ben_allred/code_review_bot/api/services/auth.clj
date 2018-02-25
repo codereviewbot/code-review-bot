@@ -5,7 +5,6 @@
               [com.ben-allred.code-review-bot.services.http :as http]
               [com.ben-allred.code-review-bot.api.services.jwt :as jwt]
               [clojure.string :as string]
-              [com.ben-allred.code-review-bot.utils.uuids :as uuids]
               [com.ben-allred.code-review-bot.utils.query-params :as qp]
               [clojure.set :as set]
               [com.ben-allred.code-review-bot.utils.json :as json]
@@ -60,7 +59,7 @@
             (->> {:client_id    (:client-id oauth-config)
                   :redirect_url (:redirect-url oauth-config)
                   :scope        (string/join " " (:scope oauth-config))
-                  :state        (uuids/random)}
+                  :state        (gensym)}
                 (qp/stringify)
                 (str (:code-url oauth-config) "?")
                 (resp/redirect)))))

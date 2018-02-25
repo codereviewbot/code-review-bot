@@ -41,3 +41,11 @@
         (assoc {} :$set)
         (mongo/update :configs {:_id (uuids/->uuid id)})
         (transform)))
+
+(defn save [config]
+    (let [config (assoc config :_id (uuids/random))]
+        (try
+            (mongo/insert :configs config)
+            config
+            (catch Exception e
+                nil))))

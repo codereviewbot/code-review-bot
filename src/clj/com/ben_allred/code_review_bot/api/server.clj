@@ -21,7 +21,8 @@
     (context "/auth" [] auth/auth)
     (GET "/health" [] {:status 200 :body {:a :ok}})
     (route/resources "/")
-    (GET "/*" [] (response/resource-response "index.html" {:root "public"})))
+    (GET "/*" [] (response/resource-response "index.html" {:root "public"}))
+    (ANY "/*" [] {:status 404}))
 
 (def ^:private app
     (-> #'base

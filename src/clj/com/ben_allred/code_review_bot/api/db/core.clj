@@ -14,3 +14,8 @@
         (:repos)
         (configs/find-by-repos)
         (map #(select-keys % [:id :description :repo-url]))))
+
+(defn save-config-for-user [user config]
+    (when-let [config (configs/save config)]
+        (users/update-by-id (:id user) (update user :repos conj (:repo-url config)))
+        config))

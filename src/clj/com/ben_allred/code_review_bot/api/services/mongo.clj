@@ -27,3 +27,6 @@
 
 (defn update [coll query document]
     (mc/find-and-modify @db coll query document {:return-new true}))
+
+(defn delete [coll query]
+    (mc/remove @db coll query))

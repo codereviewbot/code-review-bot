@@ -5,15 +5,18 @@
 
 (defn ^:private request* [request dispatch success-type error-type]
     (async/go
-        (let [[status result] (async/<! request)]
+        (let [[status result :as response] (async/<! request)]
             (dispatch (if (= :success status)
                           [success-type result]
-                          [error-type result])))))
+                          [error-type result]))
+            response)))
 
 (def request-user-details
     (fn [[dispatch]]
         (dispatch [:user/request])
-        (request* (http/get "/auth/details") dispatch :user/succeed :user/fail)))
+        (-> "/auth/details"
+            (http/get)
+            (request* dispatch :user/succeed :user/fail))))
 
 (def request-configs
     (fn [[dispatch]]
@@ -54,12 +57,25 @@
             (http/patch {:body {:data {:description description}}})
             (request* dispatch :configs.config/succeed :configs.config/fail))))
 
+(defn save-repo [repo]
+    (fn [[dispatch]]
+        (dispatch [:configs.config.new/save])
+        (-> "/api/configs"
+            (http/post {:body {:data repo}})
+            (request* dispatch :configs.config.new/succeed :configs.config.new/fail))))
+
 (defn show-modal [content & [title]]
     (fn [[dispatch]]
         (dispatch [:modal/mount content title])
         (macros/after 1 (dispatch [:modal/show]))))
 
-(defn hide-modal []
+(def hide-modal
     (fn [[dispatch]]
         (dispatch [:modal/hide])
         (macros/after 600 (dispatch [:modal/unmount]))))
+
+(defn show-toast [level text]
+    (fn [[dispatch]]
+        (let [key (gensym)]
+            (dispatch [:toast/display key level text])
+            (macros/after 6000 (dispatch [:toast/remove key])))))

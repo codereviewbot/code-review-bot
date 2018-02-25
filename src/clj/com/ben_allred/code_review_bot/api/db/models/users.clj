@@ -12,3 +12,8 @@
         (assoc {} :github-user)
         (mongo/find-one :users)
         (transform)))
+
+(defn update-by-id [id user]
+    (->> (select-keys user [:repos])
+        (assoc {} :$set)
+        (mongo/update :users {:_id id})))

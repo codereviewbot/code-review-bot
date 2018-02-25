@@ -8,10 +8,15 @@
               [com.ben-allred.code-review-bot.utils.logging :as log]
               [com.ben-allred.code-review-bot.ui.utils.core :as utils]
               [clojure.string :as string]
-              [com.ben-allred.code-review-bot.utils.strings :as strings]))
+              [com.ben-allred.code-review-bot.utils.strings :as strings]
+              [cljs.core.async :as async]))
 
 (defn ^:private key->label [key]
     (string/join " " (string/split (strings/upper-first (name key)) #"-")))
+
+(defn ^:private succeed! []
+    (async/<! (store/dispatch actions/request-configs))
+    (store/dispatch actions/hide-modal))
 
 (defn repo-field [attrs repo key]
     (let [label (key->label key)]
@@ -25,16 +30,21 @@
               (assoc :on-change #(swap! repo assoc key %))
               (dissoc :tag))]]))
 
-(defn ^:private repo-form [{:keys [repo-url id description]}]
+(defn ^:private repo-form [{:keys [repo-url id description]} action]
     (let [repo       (r/atom {:repo-url repo-url :description description})
           auto-focus (if id :description :repo-url)]
-        (fn [repo-data]
+        (fn [repo-data action]
             [:form.repo-form
              {:on-submit #(do
                               (.preventDefault %)
-                              (store/dispatch
-                                  (actions/update-description id (:description @repo)))
-                              (store/dispatch (actions/hide-modal)))}
+                              (async/go
+                                  (let [[_ _ status] (async/<! (store/dispatch (action @repo)))]
+                                      (case status
+                                          :created (succeed!)
+                                          :ok (succeed!)
+                                          :conflict (store/dispatch (actions/show-toast :error "Repo configuration already exists. Contact the repo's owner for access."))
+                                          :bad-request (store/dispatch (actions/show-toast :error "All fields must be filled out."))
+                                          (store/dispatch (actions/show-toast :error "An unknown error has occrred. Please try again later."))))))}
              [repo-field
               {:disabled   id
                :tab-index  1
@@ -58,7 +68,7 @@
      [:i.fa.fa-pencil.button
       {:on-click #(store/dispatch
                       (actions/show-modal
-                          [repo-form repo]
+                          [repo-form repo (comp (partial actions/update-description id) :description)]
                           "Edit project"))}]
      " "
      [:a {:href (nav/path-for :repo {:repo-id id})}
@@ -73,7 +83,7 @@
              [:button.pure-button.pure-button-primary.button
               {:on-click #(store/dispatch
                               (actions/show-modal
-                                  [:div "...create project form"]
+                                  [repo-form {} actions/save-repo]
                                   "Create project"))}
               [:i.fa.fa-plus-circle]]
              (cond

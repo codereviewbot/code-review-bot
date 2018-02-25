@@ -9,6 +9,7 @@
               [com.ben-allred.code-review-bot.ui.views.home :as home]
               [com.ben-allred.code-review-bot.ui.views.repo :as repo]
               [com.ben-allred.code-review-bot.ui.views.repos :as repos]
+              [com.ben-allred.code-review-bot.ui.views.components.toast :as toast]
               [com.ben-allred.code-review-bot.services.env :as env]
               [com.ben-allred.code-review-bot.utils.logging :as log :include-macros true]
               [com.ben-allred.code-review-bot.ui.views.components.modal :as modal]
@@ -32,6 +33,7 @@
               component (components (get-in state [:page :handler]) error/not-found)]
             [:div.app
              [modal/modal state]
+             [toast/toast (:toasts state)]
              (case (:status user)
                  :pending [components/spinner]
                  :error [error/not-logged-in]

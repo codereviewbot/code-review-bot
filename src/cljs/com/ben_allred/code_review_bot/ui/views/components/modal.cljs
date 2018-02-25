@@ -5,7 +5,7 @@
               [com.ben-allred.code-review-bot.utils.logging :as log]))
 
 (defn ^:private hide-modal []
-    (store/dispatch (actions/hide-modal)))
+    (store/dispatch actions/hide-modal))
 
 (defn modal [{{:keys [state content title]} :modal}]
     [:div.modal-wrapper

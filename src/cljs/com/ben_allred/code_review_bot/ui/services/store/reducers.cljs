@@ -76,5 +76,13 @@
          :modal/unmount {:state :unmounted}
          state)))
 
+(defn ^:private toasts
+    ([] {})
+    ([state [type key level text]]
+        (case type
+            :toast/display (assoc state key {:level level :text text})
+            :toast/remove (dissoc state key)
+            state)))
+
 (def root
-    (collaj.reducers/combine {:page page :config config :configs configs :user user :modal modal}))
+    (collaj.reducers/combine {:page page :config config :configs configs :user user :modal modal :toasts toasts}))
