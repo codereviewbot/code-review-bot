@@ -1,6 +1,6 @@
 (ns com.ben-allred.code-review-bot.ui.services.store.reducers
     (:require [com.ben-allred.collaj.reducers :as collaj.reducers]
-              [com.ben-allred.code-review-bot.utils.maps :as maps]))
+              [com.ben-allred.code-review-bot.utils.maps :as maps :include-macros true]))
 
 (defn ^:private page
     ([] nil)
@@ -85,4 +85,4 @@
             state)))
 
 (def root
-    (collaj.reducers/combine {:page page :config config :configs configs :user user :modal modal :toasts toasts}))
+    (collaj.reducers/combine (maps/->map page config configs user modal toasts)))
