@@ -6,12 +6,11 @@
 (defn header [logged-in?]
     [:header.header
      [:div.home-link
-      (utils/classes {:button logged-in?})
-      [:img.logo {:src "/images/logo.jpg"}]
-      [:h1
-       (when logged-in?
-           {:on-click #(nav/navigate! :home)})
-       "Code Review Bot"]]
+      (-> (when logged-in?
+              {:on-click #(nav/navigate! :home)})
+          (utils/classes {:button logged-in?}))
+      [:img.logo {:src "/images/logo.png"}]
+      [:h1 "Code Review Bot"]]
      [:div
       (when logged-in?
           [auth/logout-button])]])

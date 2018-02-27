@@ -3,7 +3,6 @@
               [com.ben-allred.collaj.enhancers :as collaj.enhancers]
               [com.ben-allred.code-review-bot.ui.services.store.reducers :as reducers]
               [reagent.core :as r]
-              [com.ben-allred.code-review-bot.utils.maps :as maps]
               [com.ben-allred.code-review-bot.utils.logging :as log :include-macros true]))
 
 (defonce ^:private store (collaj/create-custom-store r/atom

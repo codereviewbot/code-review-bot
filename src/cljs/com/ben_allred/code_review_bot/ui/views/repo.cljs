@@ -12,8 +12,7 @@
         (fn [{{{:keys [description rules messages repo-url]} :data} :config :as state}]
             (get-in state [:config :data])
             [:div
-             [:h2 "Repo"]
-             [:div description]
+             [:h2 description]
              [:div [:a {:href repo-url}
                     repo-url]]
              [:div.config

@@ -37,7 +37,7 @@
              (case (:status user)
                  :pending [components/spinner]
                  :error [error/not-logged-in]
-                 [:div
+                 [:div.scrollable
                   [main/header true]
                   [:main.main
                    [component state]]])])))

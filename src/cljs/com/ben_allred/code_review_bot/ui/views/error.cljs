@@ -5,7 +5,8 @@
 (defn not-logged-in []
     [:div
      [main/header]
-     [:div
+     [:div.main
+      [:p "Manage your Slack / Github webhook integrations"]
       [:button.pure-button.pure-button-primary.button
        {:on-click #(nav/go-to! "/auth/login")}
        [:i.fa.fa-github]

@@ -19,18 +19,17 @@
                                            (fix-string %)))))))
 
 (defn spinner []
-    [:div.loader
-     "Loading..."])
+    [:div.loader])
 
 (defn spinner-overlay [show? component]
     (if show?
         [:div
          {:style {:position :relative}}
          [:div
-          {:style {:position :absolute :min-height "100%" :min-width "100%"}}
+          {:style {:position :absolute :height "50%" :min-height "200px" :min-width "100%"}}
           [spinner]]
          [:div
-          {:style {:position :absolute :min-height "100%" :min-width "100%" :background-color "rgba(0,0,0,0.25)"}}
+          {:style {:position :absolute :height "100%" :min-height "400px" :min-width "100%" :background-color "rgba(0,0,0,0.25)"}}
           ""]
          component]
         component))

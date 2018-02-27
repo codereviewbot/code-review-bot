@@ -5,4 +5,4 @@
     [:div
      [:h2 "home"]
      [:div
-      [:a {:href (nav/path-for :repos)} "/repos"]]])
+      [:a {:href (nav/path-for :repos)} "View your projects"]]])

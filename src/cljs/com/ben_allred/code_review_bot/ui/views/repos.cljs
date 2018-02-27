@@ -15,8 +15,14 @@
     (string/join " " (string/split (strings/upper-first (name key)) #"-")))
 
 (defn ^:private succeed! []
-    (async/<! (store/dispatch actions/request-configs))
-    (store/dispatch actions/hide-modal))
+    (async/go
+        (async/<! (store/dispatch actions/request-configs))
+        (store/dispatch actions/hide-modal)))
+
+(def ^:private toast-messages
+    {:conflict    "Repo configuration already exists. Contact the repo's owner for access."
+     :bad-request "All fields must be filled out."
+     :default     "An unknown error has occrred. Please try again later."})
 
 (defn repo-field [attrs repo key]
     (let [label (key->label key)]
@@ -39,12 +45,11 @@
                               (.preventDefault %)
                               (async/go
                                   (let [[_ _ status] (async/<! (store/dispatch (action @repo)))]
-                                      (case status
-                                          :created (succeed!)
-                                          :ok (succeed!)
-                                          :conflict (store/dispatch (actions/show-toast :error "Repo configuration already exists. Contact the repo's owner for access."))
-                                          :bad-request (store/dispatch (actions/show-toast :error "All fields must be filled out."))
-                                          (store/dispatch (actions/show-toast :error "An unknown error has occrred. Please try again later."))))))}
+                                      (if (#{:created :ok} status)
+                                          (succeed!)
+                                          (->> (get toast-messages status (:default toast-messages))
+                                              (actions/show-toast :error)
+                                              (store/dispatch))))))}
              [repo-field
               {:disabled   id
                :tab-index  1
