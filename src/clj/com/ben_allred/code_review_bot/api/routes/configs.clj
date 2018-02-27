@@ -32,11 +32,11 @@
                                   (not config) [:conflict]
                                   :else [:created {:data config}]))))
     (GET "/" req
-        (if-let [configs (-> req
-                             (:user)
-                             (db/configs-by-user))]
-            (response/respond [:ok {:data (map sans configs)}])
-            (response/respond [:not-found])))
+        (let [user    (:user req)
+              configs (db/configs-by-user user)]
+            (response/respond (if (not user)
+                                  [:unauthorized]
+                                  [:ok {:data (map sans configs)}]))))
     (GET "/:config-id" {:keys [params] :as req}
         (if-let [config (-> req
                             (:user)
