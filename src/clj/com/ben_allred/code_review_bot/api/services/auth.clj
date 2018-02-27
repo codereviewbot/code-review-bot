@@ -10,7 +10,8 @@
               [com.ben-allred.code-review-bot.utils.json :as json]
               [com.ben-allred.code-review-bot.utils.logging :as log]
               [com.ben-allred.code-review-bot.api.services.integrations.github :as github]
-              [com.ben-allred.code-review-bot.api.utils.response :as response]))
+              [com.ben-allred.code-review-bot.api.utils.response :as response]
+              [com.ben-allred.code-review-bot.api.db.models.users :as users]))
 
 (def ^:private oauth-config
     {:client-id     (env/get :oauth-client-id)
@@ -48,6 +49,7 @@
         (async/<!!)))
 
 (defn ^:private authenticate [user]
+    (users/upsert (:login user))
     (-> (str (env/get :base-url) "/")
         (resp/redirect)
         (token->cookie user)))
